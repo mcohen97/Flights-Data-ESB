@@ -23,7 +23,7 @@ describe('Registration route', function() {
     describe('register function', function() {
         it('Should return OK message', function() {
             testService.register(req, res);
-            expect(res.jsonCalledWith.message).to.contain('ok got request!');
+            expect(res.jsonCalledWith.message).to.contain('registration successful!');
             expect(res.statusAssigned).to.eq(200);
         });
     })

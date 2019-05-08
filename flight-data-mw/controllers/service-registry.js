@@ -1,15 +1,15 @@
 
 
 module.exports = class ServiceRegistry{
-    constructor(){
 
+    constructor(serviceStorage){
+        this.clients = serviceStorage;
     }
 
     async register(req,res){
         res.status(200);
         res.json({
-            message: 'ok got request!'
+            message: 'registration successful!'
         });
     }
-
 }
