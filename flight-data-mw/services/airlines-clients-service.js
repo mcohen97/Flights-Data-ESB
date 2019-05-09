@@ -1,11 +1,9 @@
-const AirlinesClientsRepository = require('../repositories/airlines-clients-repository');
-
 module.exports = class AirlinesClientsService {
-    constructor() {
-        this.clientsRepository = new AirlinesClientsRepository();
+    constructor(airlinesClientsRepository) {
+        this.clientsRepository = airlinesClientsRepository;
     }
     async getAll() {
-        return await this.getAll();
+        return await this.clientsRepository.getAll();
     }
     async add(airlineService) {
         return await this.clientsRepository.add(airlineService);
