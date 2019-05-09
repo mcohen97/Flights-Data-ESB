@@ -1,7 +1,7 @@
 const expect = require('chai').expect;
 
-const serviceRegistry = require('../../repositories/airlines-services-memory-repository');
-const airlineService = require('../../models/airline-service');
+const serviceRegistry = require('../../repositories/airlines-clients-memory-repository');
+const airlineService = require('../../models/airline-client');
 
 const testRepository = new serviceRegistry();
 const dataDesctiption = {};

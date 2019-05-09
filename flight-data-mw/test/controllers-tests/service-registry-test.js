@@ -1,8 +1,15 @@
 const expect = require('chai').expect;
 
-const serviceRegistry = require('../../controllers/service-registry');
+const ServiceRegistry = require('../../controllers/service-registry');
 
-const testService = new serviceRegistry();
+let serviceStub = {
+    calls: 0,
+    add: function(airline){
+        this.calls++;
+    }
+}
+
+const testService = new ServiceRegistry(serviceStub);
 
 let req = {
     body: {},
@@ -20,11 +27,16 @@ let res = {
 };
 
 describe('Registration route', function() {
+    testService.register(req, res);
     describe('register function', function() {
-        it('Should return OK message', function() {
-            testService.register(req, res);
-            expect(res.jsonCalledWith.message).to.contain('registration successful!');
+        it('Should have 200 status code', function(){
             expect(res.statusAssigned).to.eq(200);
+        });
+        it('Should return OK message', function() {
+            expect(res.jsonCalledWith.message).to.contain('registration successful!');
+        });
+        it("Should interact with service", function(){
+            expect(serviceStub.calls).to.eq(1);
         });
     })
 });
