@@ -1,4 +1,4 @@
-module.exports = class AirlinesServicesRepository{
+module.exports = class AirlinesClientsRepository{
     async getAll(){
         throw new Error('Not implemented');
     }
