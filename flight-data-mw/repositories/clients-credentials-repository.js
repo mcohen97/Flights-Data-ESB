@@ -1,11 +1,13 @@
-module.exports = class AirlinesClientsRepository{
-    async getAll(){
+module.exports = class ClientsCredentialsRepository{
+    async get(username){
         throw new Error('Not implemented');
     }
-    async add(airlineService){
+
+    async exists(username){
         throw new Error('Not implemented');
     }
-    async exists(airlineService){
+
+    async add(credential){
         throw new Error('Not implemented');
     }
 }

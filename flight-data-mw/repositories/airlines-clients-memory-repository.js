@@ -12,4 +12,7 @@ module.exports = class AirlinesServicesMemoryRepository extends AirlinesClientsR
     async add(airlineService){
         this.clients.push(airlineService);
     }
+    async exists(clientUsername){
+        return this.clients.some(c => c.username === clientUsername);
+    }
 }

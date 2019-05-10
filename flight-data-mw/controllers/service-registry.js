@@ -1,4 +1,3 @@
-const AirlineClient = require('../models/airline-rest-client');
 
 module.exports = class ServiceRegistry{
 
@@ -7,12 +6,13 @@ module.exports = class ServiceRegistry{
     }
 
     async register(req,res){
-        let body = req.body;
-        console.log(body);
-        this.clients.add(new AirlineClient(body.token,body.url,body.port,undefined));
+        let client = req.body;
+        console.log(client);
+        let token =await this.clients.add(client);
         res.status(200);
         res.json({
-            message: 'registration successful!'
+            message: 'registration successful!',
+            token: token
         });
     }
 }
