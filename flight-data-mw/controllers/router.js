@@ -8,6 +8,6 @@ const repository = new AirlinesClientsRepository();
 const service = new AirlinesClientsService(repository);
 const clients = new ServiceRegistry(service);
 
-router.post('/airlines', (req, res) => clients.register(req,res));
+router.post('/register', (req, res) => clients.register(req,res));
 
-module.exports = router;
+module.exports = {router, service};
