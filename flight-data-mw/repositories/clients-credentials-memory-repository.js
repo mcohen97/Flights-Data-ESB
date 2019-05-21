@@ -4,7 +4,7 @@ module.exports = class ClientsCredentialsMemoryRepository extends ClientsCredent
     
     constructor(){
         super();
-        this.credentials = [{username:'admin', password:'admin'}];
+        this.credentials = [{username:'admin', password:'admin'},{username:'username', password:'password'}];
     }
     
     async get(username){
@@ -17,5 +17,13 @@ module.exports = class ClientsCredentialsMemoryRepository extends ClientsCredent
 
     async add(credential){
         this.credentials.push(credential);
+    }
+
+    async remove(username){
+        for( let i =0; i< this.credentials.length; i++){
+            if ( this.credentials[i].username === username){
+                this.credentials.splice(i, 1);
+            }
+        }
     }
 }

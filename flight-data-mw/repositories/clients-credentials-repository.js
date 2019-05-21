@@ -10,4 +10,8 @@ module.exports = class ClientsCredentialsRepository{
     async add(credential){
         throw new Error('Not implemented');
     }
+
+    async remove(username){
+        throw new Error('Not implemented');        
+    }
 }
