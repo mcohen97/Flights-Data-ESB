@@ -1,7 +1,19 @@
-module.exports = class AirlineRestClientData{
+const AirlineClientData = require('./airline-client-data');
+
+module.exports = class AirlineRestClientData extends AirlineClientData{
     constructor(data){
         super(data);
-        this.url = data.url;
-        this.port = data.port;
+        setUrl(data.url);
+        setPort(data.port);
+    }
+
+    setUrl(url){
+        //TODO: perform validations.
+        this.url = url;
+    }
+
+    setPort(port){
+        //TODO: perform validations.
+        this.port = port;
     }
 }
