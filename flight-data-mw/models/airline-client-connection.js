@@ -1,8 +1,8 @@
 module.exports= class AirlineClient{
 
-    constructor(token,credentials){
-        this.token= token;
-        this.credentials = credentials;
+    constructor(clientData){
+        this.data= clientData.token;
+        this.credentials = clientData.credentials;
     }
 
     send(data){

@@ -1,57 +1,41 @@
-const AirlineClient = require('../models/airline-rest-client');
+const ClientConnectionFactory = require('../models/connection-factory');
 const jwt = require('jsonwebtoken');
 
 
 module.exports = class AirlinesClientsService {
-    constructor(airlinesClientsRepository, clientsCredentialsRepository) {
-        this.clientsRepository = airlinesClientsRepository;
-        this.credentialsRepository = clientsCredentialsRepository;
+
+    constructor(airlinesClientsDataRepository, authenticationService) {
+        this.clientsRepository = airlinesClientsDataRepository;
+        this.authentication = authenticationService;
+        this.connections=[];
     }
+
     async getAll() {
         return await this.clientsRepository.getAll();
     }
-    async add(airlineService) {
-        let username = airlineService.username;
-        let password = airlineService.password;
-
-        if(!(await this.credentialsRepository.exists(username))){
-            throw new Error('client not found');
-        }
-        //check there are not more than one clientservices subscribed with the same credentials.
-        if(await this.clientsRepository.exists(username)){
-            throw new Error('client already subscribed');
-        }
-        let credentials = await this.credentialsRepository.get(username);
-        if(credentials.password != password){
-            throw new Error('incorrect password');
-        }
-
-        let clientToken=airlineService.token;
-        let url=airlineService.url;
-        let port = airlineService.port;
-
-        this.clientsRepository.add(new AirlineClient(clientToken,url,port,credentials,undefined));
-
-        let token =jwt.sign({ clientId: username}, 'OrtJWTSecretShh');
+    async add(airlineClientData) {
+        await this.authentication.login(airlineClientData.username, airlineClientData.password);
+        let newConnection = ClientConnectionFactory.createConnection(airlineClientData);
+        this.clientsRepository.add(airlineClientData);
+        console.log(this.connections);
+        this.connections.push(newConnection);
+        console.log(this.connections);
+        this.authentication.deleteUnusedCredential(airlineClientData.username);
+        let token =jwt.sign({ clientId: airlineClientData.username}, 'JWTSecret');
         return token;
     }
 
-    run(){
-        this.getAll()
-            .then(clients => {
-                updateClients(clients);
-            });
-    }
-}
+    updateClients(){
+        let args = {
+            data: { test: "hello" },
+            headers: { "Content-Type": "application/json" }
+        };
+        console.log('clientes '+ this.connections);
 
-function updateClients(clients){
-    let args = {
-        data: { test: "hello" },
-        headers: { "Content-Type": "application/json" }
-    };
-    console.log('clientes '+ clients);
-    clients.forEach(ep => {
-       console.log("enviandole a :"+ep);
-       ep.send(args);
-   });
+        this.connections.forEach(ep => {
+           console.log("enviandole a :"+ep);
+           ep.send(args);
+       });
+    }
+
 }

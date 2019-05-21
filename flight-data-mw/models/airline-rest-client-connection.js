@@ -1,13 +1,12 @@
-const AirlineClient = require('./airline-client');
+const AirlineClient = require('./airline-client-connection');
 const Client = require('node-rest-client').Client;
 
 module.exports= class AirlineClientRest extends AirlineClient{
 
-    constructor(token,url, port, credentials, dataDescription){
-    super(token,credentials);
-    this.url = url;
-    this.port = port;
-    this.dataDescription = dataDescription;
+    constructor(clientData){
+        super(clientData);
+        this.url = clientData.url;
+        this.port = clientData.port;
     }
 
     send(data){
