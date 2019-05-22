@@ -1,7 +1,7 @@
 let express = require('express');
 let bodyParser = require('body-parser');
 let app = express();
-let port = 3002;
+let port = 3003;
 
 let endpoints = new Array();
 
@@ -44,9 +44,11 @@ var args = {
     data :{ endpointType: 'REST_API',
             url: 'http://localhost',
             port: port,
+            airline: 'AA',
             token: 'richard',
             username: 'admin',
-            password: 'admin'},
+            password: 'admin',
+            requiredFields: ["YEAR"]},
     headers: { "Content-Type": "application/json" }
 };
  
