@@ -1,4 +1,4 @@
-const EndpointType ={
+const EndpointTypes ={
     REST_API:'REST_API'
 }
-module.exports = EndpointType;
+module.exports = EndpointTypes;
