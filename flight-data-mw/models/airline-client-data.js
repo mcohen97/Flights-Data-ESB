@@ -1,3 +1,7 @@
+const EndpointTypes = require('../data-description/endpoint-types');
+const FlightDataFields = require('../data-description/flight-data-fields');
+const Airlines = require('../data-description/airlines');
+
 module.exports = class AirlineClientData{
 
     constructor(data){
@@ -6,29 +10,61 @@ module.exports = class AirlineClientData{
         this.triggersIds = data.triggersIds;
         this.filtersIds = data.filtersIds;
         this.validationsIds = data.validationsIds;
-        setRequiredFields(data.requiredFields);
-        setToken(data.token);
-        setEndpointType(data.endpointType);
-        setResponseContentType(data.responseContentType);
+        this.setAirline(data.airline)
+        this.setRequiredFields(data.requiredFields);
+        this.setToken(data.token);
+        this.setEndpointType(data.endpointType);
+        this.setResponseContentType(data.responseContentType);
     }
 
-    setRequiredFields(requiredFields){
-        //TODO: agregar validaciones
-        this.requiredFields = requiredFields;
+    setAirline(airline){
+        if(!airline){
+            throw new Error("The client system's airline must be specified");
+        }
+        let allAirlines = Object.keys(Airlines);
+        if(!allAirlines.includes(airline.toUpperCase())){
+            throw new Error(`Airline '${airline}' does not exist`);
+        }
+  
+        this.airline = airline;
     }
 
     setToken(token){
-        //TODO: agregar validaciones
+        if(!token){
+            throw new Error("The client's authentication token must be specified");
+        }
+        let allTypes = Object.keys(EndpointTypes);
         this.token = token;
     }
 
     setEndpointType(endpointType){
-        //TODO: agregar validaciones
+        if(!endpointType){
+            throw new Error('The endpoint type must be specified');
+        }
+        let allTypes = Object.keys(EndpointTypes);
+        if(!allTypes.includes(endpointType.toUpperCase())){
+            throw new Error(`Endpoint type '${endpointType}' does not exist`);
+        }
         this.endpointType = endpointType;
     }
 
     setResponseContentType(responseContentType){
-        //TODO: agregar validaciones
+        if(!responseContentType){
+            throw new Error('The endpoint type must be specified');
+        }
         this.responseContentType = responseContentType;
+    }
+
+    setRequiredFields(requiredFields){
+        if(!requiredFields){
+            throw new Error('The required fields must be specified')
+        }
+        let allFields = Object.keys(FlightDataFields);
+        requiredFields.forEach(field => {
+            if(!allFields.includes(field.toUpperCase())){
+                throw new Error(`Flight data field '${field}' does not exist`);
+            }
+        });
+        this.requiredFields = requiredFields;
     }
 }
