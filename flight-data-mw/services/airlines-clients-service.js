@@ -8,7 +8,7 @@ module.exports = class AirlinesClientsService {
     constructor(airlinesClientsDataRepository, authenticationService) {
         this.clientsRepository = airlinesClientsDataRepository;
         this.authentication = authenticationService;
-        this.connections=[];
+        this.connections= [];
     }
 
     async getAll() {
@@ -39,6 +39,14 @@ module.exports = class AirlinesClientsService {
            console.log("enviandole a :"+ep);
            ep.send(args);
        });
+    }
+
+    async loadPreviousRegisteredClients(){
+        let clients =await this.clientsRepository.getAll();
+        clients.forEach((c) => {
+            let conn =ClientConnectionFactory.createConnection(c);
+            this.connections.push(conn);
+        });
     }
 
 }

@@ -1,9 +1,6 @@
 {
     "repository": {
-        "type": "memory"
-    },
-    "data": {
-        "file": "./data/hw_200.csv",
-        "db": "./data/db.sqlite"
+        "type": "mongodb",
+        "url": "mongodb://localhost:27017/flightDataDB"
     }
 }

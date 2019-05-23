@@ -3,4 +3,4 @@ const ContentTypes ={
     JSON: 'JSON',
     PLAIN_TEXT: 'TEXT'
 };
-module.exports = ContentTypes;
+module.exports = Object.freeze(ContentTypes);

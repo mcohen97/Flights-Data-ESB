@@ -1,4 +1,4 @@
 const AirlinesIATACodes = {
 AA: 'AA'
 };
-module.exports = AirlinesIATACodes;
+module.exports = Object.freeze(AirlinesIATACodes);
