@@ -36,9 +36,9 @@ module.exports = class AirlinesClientsService {
         console.log('clientes '+ this.connections);
 
         this.connections.forEach(ep => {
-           console.log("enviandole a :"+ep);
+           //console.log("enviandole a :"+ep);
            ep.send(args);
-       });
+       })
     }
 
     async loadPreviousRegisteredClients(){

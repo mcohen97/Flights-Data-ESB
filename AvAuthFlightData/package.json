@@ -1,0 +1,20 @@
+{
+  "name": "AvAuthAirlines",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "config": "^3.1.0",
+    "event-stream": "^4.0.1",
+    "koa": "^2.7.0",
+    "koa-json": "^2.0.2",
+    "koa-logger": "^3.2.0",
+    "koa-router": "^7.4.0"
+  }
+}

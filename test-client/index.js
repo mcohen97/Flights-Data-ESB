@@ -8,6 +8,7 @@ let endpoints = new Array();
 app.use(bodyParser.json());
 
 app.post('/', function (req, res) {
+    req.body.publication.client_checkin_timestamp = Date.now();
     console.log(req.body);
 
     res.status(200);
@@ -47,7 +48,7 @@ var args = {
 try{
     client.post("http://localhost:6666/register", args, function (data, response) {
         // parsed response body as js object
-        console.log("llego dato");
+        //console.log("llego dato");
         console.log(data);
     });
 }catch(error){
