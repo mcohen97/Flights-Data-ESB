@@ -8,7 +8,6 @@ module.exports = class ConnectionFactory{
     switch(airlineClientData.endpointType.toUpperCase()){
         case EndpointTypes.REST_API:
             result = new AirlineRestClientConnection(airlineClientData);
-            console.log(result);
         break;
     }
     return result;
