@@ -1,4 +1,4 @@
-const AirlineClientData = require('./airline-client-data');
+const AirlineClientData = require('./abstract-airline-client-data');
 
 module.exports = class AirlineRestClientData extends AirlineClientData{
     constructor(data){

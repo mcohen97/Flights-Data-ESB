@@ -1,4 +1,4 @@
-const AirlineClient = require('./airline-client-connection');
+const AirlineClient = require('./abstract-airline-client-connection');
 const Client = require('node-rest-client').Client;
 
 module.exports= class AirlineClientRest extends AirlineClient{

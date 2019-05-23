@@ -1,6 +1,6 @@
 const express = require('express');
 const AirlinesClientsRepository = require('../repositories/repository')('airlines-clients');
-const ClientsCredentialsRepository = require('../repositories/repository')('clients-credentials');
+const ClientsCredentialsRepository = require('../repositories/clients-credentials-memory-repository');
 const AirlinesClientsService = require('../services/airlines-clients-service');
 const AuthenticationService = require('../services/authentication-service');
 const ServiceRegistry = require('./service-registry');
