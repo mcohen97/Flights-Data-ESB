@@ -33,7 +33,6 @@ module.exports = class AirlineClientData{
         if(!token){
             throw new Error("The client's authentication token must be specified");
         }
-        let allTypes = Object.keys(EndpointTypes);
         this.token = token;
     }
 

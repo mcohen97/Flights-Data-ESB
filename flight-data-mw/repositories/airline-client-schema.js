@@ -1,4 +1,4 @@
-const AirlineClientEntity = {
+const AirlineClientSchema = {
     username: {type: String, required: true},
     password: {type: String, required: true },
     triggersIds:{type: [Number]},
@@ -8,9 +8,6 @@ const AirlineClientEntity = {
     requiredFields:{type: [String]},
     token:{type:String, required:true},
     endpointType:{type:String, required:true},
-    responseContentType:{type:String, required: true},
-    //transitorio.
-    url:{type:String},
-    port:{type:Number}
+    responseContentType:{type:String, required: true}
 };
-module.exports = AirlineClientEntity;
+module.exports = AirlineClientSchema;

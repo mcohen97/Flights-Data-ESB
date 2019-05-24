@@ -33,7 +33,6 @@ module.exports = class AirlinesClientsService {
             data: { test: "hello" },
             headers: { "Content-Type": "application/json" }
         };
-        console.log('clientes '+ this.connections);
 
         this.connections.forEach(ep => {
            //console.log("enviandole a :"+ep);

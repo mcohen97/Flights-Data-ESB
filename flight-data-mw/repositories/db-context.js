@@ -1,6 +1,7 @@
 const Config = require('config');
 const mongoose = require('mongoose');
 const AirlineClientSchema= require('./airline-client-schema');
+const AirlineRestClientSchema = require('./airline-rest-client-schema')
 const AirlineClientFactory = require('../models/airline-client-data-factory');
 const Schema = mongoose.Schema;
 
@@ -23,13 +24,19 @@ module.exports = class DBContext {
     }
     
     static async loadCollections() {
-        const airlineClientSchema = new Schema(AirlineClientSchema, { id: false });
+
+        let options = {discriminatorKey: 'endpointType',
+                       id: false };
+
+        const airlineClientSchema = new Schema(AirlineClientSchema, options);
         airlineClientSchema.set('toObject', {
             transform: function (doc, ret) {
                 ret = AirlineClientFactory.createClientData(ret);
             }
         });
-        module.exports.AirlineClient = this.connection.model('AirlineClient', airlineClientSchema);
+        let AirlineClient = this.connection.model('AirlineClient', airlineClientSchema);
+        AirlineClient.discriminator('AirlineRestClient',new Schema(AirlineRestClientSchema,options));
+        module.exports.AirlineClient = AirlineClient;
     }
 
     static getUrl() {
