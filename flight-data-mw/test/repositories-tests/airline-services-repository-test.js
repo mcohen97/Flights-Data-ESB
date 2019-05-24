@@ -1,11 +1,12 @@
 const expect = require('chai').expect;
 
 const serviceRegistry = require('../../repositories/airlines-clients-memory-repository');
-const airlineService = require('../../models/airline-client');
+//const airlineService = require('../../models/airline-rest-client-data');
 
 const testRepository = new serviceRegistry();
-const dataDesctiption = {};
-const airlineDummy = new airlineService("endpoint","port", dataDesctiption);
+//const dataDesctiption = {};
+const airlineDummy = {}; 
+//new airlineService(dataDesctiption);
 
 describe('Airline Services Repository', function() {
     describe('add function', function() {
@@ -17,5 +18,11 @@ describe('Airline Services Repository', function() {
             .then((undef) =>testRepository.getAll())
             .then((services) => {expect(services.length).to.eq(1)});
         });
-    })
+    });
+    describe('exists function',function(){
+        //pending.
+    });
+    describe('delete function', function(){
+        //pending
+    });
 });

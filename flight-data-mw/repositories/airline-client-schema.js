@@ -5,9 +5,9 @@ const AirlineClientSchema = {
     filtersIds:{type: [Number]},
     validationsIds:{type: [Number]},
     airline:{type: String, required: true},
-    requiredFields:{type: [String]},
+    requestedFields:{type: [String]},
     token:{type:String, required:true},
     endpointType:{type:String, required:true},
     responseContentType:{type:String, required: true}
 };
-module.exports = AirlineClientSchema;
+module.exports = AirlineClientSchema;  

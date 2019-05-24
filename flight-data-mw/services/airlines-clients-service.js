@@ -19,6 +19,7 @@ module.exports = class AirlinesClientsService {
         let airlineClientData = AirlineClientDataFactory.createClientData(data)
 
         await this.authentication.login(airlineClientData.username, airlineClientData.password);
+        
         let newConnection = ClientConnectionFactory.createConnection(airlineClientData);
         this.clientsRepository.add(airlineClientData);
         this.connections.push(newConnection);
@@ -35,7 +36,6 @@ module.exports = class AirlinesClientsService {
         };
 
         this.connections.forEach(ep => {
-           //console.log("enviandole a :"+ep);
            ep.send(args);
        })
     }

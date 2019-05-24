@@ -11,7 +11,7 @@ module.exports = class AirlineClientData{
         this.filtersIds = data.filtersIds;
         this.validationsIds = data.validationsIds;
         this.setAirline(data.airline)
-        this.setRequiredFields(data.requiredFields);
+        this.setRequiredFields(data.requestedFields);
         this.setToken(data.token);
         this.setEndpointType(data.endpointType);
         this.setResponseContentType(data.responseContentType);
@@ -49,21 +49,21 @@ module.exports = class AirlineClientData{
 
     setResponseContentType(responseContentType){
         if(!responseContentType){
-            throw new Error('The endpoint type must be specified');
+            throw new Error('The responce content type must be specified');
         }
         this.responseContentType = responseContentType;
     }
 
-    setRequiredFields(requiredFields){
-        if(!requiredFields){
-            throw new Error('The required fields must be specified')
+    setRequiredFields(requestedFields){
+        if(!requestedFields){
+            throw new Error('The requested fields must be specified')
         }
         let allFields = Object.keys(FlightDataFields);
-        requiredFields.forEach(field => {
+        requestedFields.forEach(field => {
             if(!allFields.includes(field.toUpperCase())){
                 throw new Error(`Flight data field '${field}' does not exist`);
             }
         });
-        this.requiredFields = requiredFields;
+        this.requestedFields = requestedFields;
     }
 }

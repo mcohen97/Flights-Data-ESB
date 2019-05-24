@@ -13,6 +13,9 @@ const testService = new ServiceRegistry(serviceStub);
 
 let req = {
     body: {},
+    accepts: function(){
+        return true;
+    }
 };
 
 let res = {
