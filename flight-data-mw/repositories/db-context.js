@@ -1,8 +1,10 @@
 const Config = require('config');
 const mongoose = require('mongoose');
 const AirlineClientSchema= require('./airline-client-schema');
+const Credentials = require('./credentials-schema');
 const AirlineRestClientSchema = require('./airline-rest-client-schema')
 const AirlineClientFactory = require('../models/airline-client-data-factory');
+const EndpointTypes = require('../data-description/endpoint-types');
 const Schema = mongoose.Schema;
 
 module.exports = class DBContext {
@@ -35,8 +37,12 @@ module.exports = class DBContext {
             }
         });
         let AirlineClient = this.connection.model('AirlineClient', airlineClientSchema);
-        AirlineClient.discriminator('AirlineRestClient',new Schema(AirlineRestClientSchema,options));
+        AirlineClient.discriminator(EndpointTypes.REST_API,new Schema(AirlineRestClientSchema,options));
         module.exports.AirlineClient = AirlineClient;
+
+        const credentialsSchema = new Schema(Credentials,{id:false});
+        let Credential = this.connection.model('Credential',credentialsSchema);
+        module.exports.Credential= Credential;
     }
 
     static getUrl() {
