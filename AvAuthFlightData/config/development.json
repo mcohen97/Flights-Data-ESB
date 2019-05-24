@@ -5,12 +5,11 @@
     "data": {
         "file_airlines": "./data/airlines.csv",
         "file_airports": "./data/airports.csv",
-        "file_flights": "./data/flights.csv",
-        "db": "./data/db.sqlite"
+        "file_flights": "./data/flights.csv"
     },
     "publish_config":{
         "data_length": 100,
-        "interval": 1000,
+        "interval": 3000,
         "url": "http://localhost:6666/publish"
     },
     "port":8081
