@@ -1,6 +1,7 @@
 const EndpointTypes = require('../data-description/endpoint-types');
 const FlightDataFields = require('../data-description/flight-data-fields');
 const Airlines = require('../data-description/airlines');
+const TriggerExpressionParser = require('./trigger-parser');
 
 module.exports = class AirlineClientData{
 
@@ -11,10 +12,15 @@ module.exports = class AirlineClientData{
         this.filtersIds = data.filtersIds;
         this.validationsIds = data.validationsIds;
         this.setAirline(data.airline)
-        this.setRequiredFields(data.requestedFields);
+        this.setRequestedFields(data.requestedFields);
+        this.setTriggerExpression(data.triggerExpression);
         this.setToken(data.token);
         this.setEndpointType(data.endpointType);
         this.setResponseContentType(data.responseContentType);
+    }
+
+    setTriggerExpression(triggerExpression){
+        this.triggerExpression = TriggerExpressionParser.formatTriggerExpression(triggerExpression,this.requestedFields);
     }
 
     setAirline(airline){
@@ -54,7 +60,7 @@ module.exports = class AirlineClientData{
         this.responseContentType = responseContentType;
     }
 
-    setRequiredFields(requestedFields){
+    setRequestedFields(requestedFields){
         if(!requestedFields){
             throw new Error('The requested fields must be specified')
         }

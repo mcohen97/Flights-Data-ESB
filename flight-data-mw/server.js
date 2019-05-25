@@ -17,6 +17,7 @@ module.exports.initServer = async function () {
         console.log('App listening at http://%s:%s', host, port)
     });
 
-    /*const service = require('./controllers/router').service;
-    setInterval(() => service.updateClients(),2500);*/
+    const service = require('./controllers/router').service;
+    service.loadPreviousRegisteredClients();
+    //setInterval(() => service.updateClients(),2500);
 }

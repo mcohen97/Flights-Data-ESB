@@ -1,14 +1,14 @@
 let express = require('express');
 let bodyParser = require('body-parser');
 let app = express();
-let port = 3005;
+let port = 3004;
 
 let endpoints = new Array();
 
 app.use(bodyParser.json());
 
 app.post('/', function (req, res) {
-    req.body.publication.client_checkin_timestamp = Date.now();
+    //req.body.publication.client_checkin_timestamp = Date.now();
     console.log(req.body);
 
     res.status(200);
@@ -39,9 +39,12 @@ var args = {
             port: port,
             airline: 'AA',
             token: 'richard',
-            username: 'admin',
-            password: 'admin',
-            requiredFields: ["YEAR"]},
+            username: 'username',
+            password: 'password',
+            requestedFields: ["YEAR"],
+            triggerExpression: 'YEAR > 2015'
+        },
+            
     headers: { "Content-Type": "application/json" }
 };
 

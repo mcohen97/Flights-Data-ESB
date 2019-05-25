@@ -8,6 +8,7 @@ const AirlineClientSchema = {
     requestedFields:{type: [String]},
     token:{type:String, required:true},
     endpointType:{type:String, required:true},
-    responseContentType:{type:String, required: true}
+    responseContentType:{type:String, required: true},
+    triggerExpression:{type:String, required: false}
 };
 module.exports = AirlineClientSchema;  

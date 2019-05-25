@@ -13,9 +13,9 @@ const airlinesServicesRepository = new AirlinesClientsRepository();
 const clientsCredentialsRepository = new ClientsCredentialsRepository();
 const triggersRepository = new TriggerRepository();
 const authService = new AuthenticationService(clientsCredentialsRepository,airlinesServicesRepository);
-const dataProccesService = new DataProcessService(triggersRepository,airlinesServicesRepository);
 
 const service = new AirlinesClientsService(airlinesServicesRepository, authService);
+const dataProccesService = new DataProcessService(service);
 const clients = new ServiceRegistry(service);
 const dataProcessor = new DataProcessor(dataProccesService);
 

@@ -12,7 +12,7 @@ module.exports = class AirlinesClientsService {
     }
 
     async getAll() {
-        return await this.clientsRepository.getAll();
+        return this.connections;
     }
 
     async add(data) {
@@ -34,7 +34,6 @@ module.exports = class AirlinesClientsService {
             data: { test: "hello" },
             headers: { "Content-Type": "application/json" }
         };
-
         this.connections.forEach(ep => {
            ep.send(args);
        })
@@ -42,6 +41,7 @@ module.exports = class AirlinesClientsService {
 
     async loadPreviousRegisteredClients(){
         let clients =await this.clientsRepository.getAll();
+        console.log('clientes guardados: '+clients.length);
         clients.forEach((c) => {
             let conn =ClientConnectionFactory.createConnection(c);
             this.connections.push(conn);

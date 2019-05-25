@@ -29,14 +29,14 @@ console.log("interval: " + interval);
 async function sendMessages(length, interval, url){
     const flightService = new FlightService();
     let i = 0;
-    setInterval(async () => {
+    //setInterval(async () => {
         let messages = await flightService.getAll(length,i);
         i += length
         for(message of messages)
             message.publisher_checkout_timestamp = Date.now();
         console.log("sent");
         send(messages,url);
-    }, interval);
+    //}, interval);
 }   
 
 async function send(message, url){

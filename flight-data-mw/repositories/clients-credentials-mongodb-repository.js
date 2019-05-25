@@ -7,6 +7,7 @@ module.exports = class ClientsCredentialsMemoryRepository extends ClientsCredent
         super();
         this.credentials= DBContext.Credential;
         this.add({username:"username", password:"password"});
+        this.add({username:"admin", password:"admin"});
     }
     
     async get(aUsername){

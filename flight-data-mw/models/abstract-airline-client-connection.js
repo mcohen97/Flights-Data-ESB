@@ -1,8 +1,7 @@
 module.exports= class AirlineClient{
 
     constructor(clientData){
-        this.data= clientData.token;
-        this.credentials = clientData.credentials;
+        this.data= clientData;
     }
 
     send(data){
@@ -12,4 +11,9 @@ module.exports= class AirlineClient{
     getContentType(){
         throw new Error('Not implemented');
     }
+
+    getTrigger(){
+        return this.data.trigger;
+    }
+
 }
