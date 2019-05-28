@@ -9,10 +9,15 @@ module.exports = class AirlinesClientsService {
         this.clientsRepository = airlinesClientsDataRepository;
         this.authentication = authenticationService;
         this.connections= [];
+        this.connectionsIataHash = [];
     }
 
     async getAll() {
         return this.connections;
+    }
+
+    async getByIata(iata){
+        return this.connectionsIataHash[iata];
     }
 
     async add(data) {
@@ -23,6 +28,7 @@ module.exports = class AirlinesClientsService {
         let newConnection = ClientConnectionFactory.createConnection(airlineClientData);
         this.clientsRepository.add(airlineClientData);
         this.connections.push(newConnection);
+        this.connectionsIataHash[airlineClientData.airline].push(newConnection);
 
         this.authentication.deleteUnusedCredential(airlineClientData.username);
         let token =Jwt.sign({ clientId: airlineClientData.username}, 'JWTSecret');
@@ -45,6 +51,7 @@ module.exports = class AirlinesClientsService {
         clients.forEach((c) => {
             let conn =ClientConnectionFactory.createConnection(c);
             this.connections.push(conn);
+            this.connectionsIataHash[c.airline].push(conn);
         });
     }
 
