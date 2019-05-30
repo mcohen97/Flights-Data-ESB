@@ -8,10 +8,11 @@ module.exports = class DataProcessService {
 
     async executeTriggers(dataReceived) {
         for (let data of dataReceived) {
-            let connections = await this.clients.getByIata(data.AIRLINE);
             data = formatMessage(data);
+            let connections = await this.clients.getByIata(data.AIRLINE);
+            console.log("vuelo de aerolinea: "+ data.AIRLINE);
 
-            for(connection of connections){
+            for(let connection of connections){
                 let trigger = connection.getTrigger();
                 if(trigger(data)){
                     data.mw_checkout_timestamp = Date.now();

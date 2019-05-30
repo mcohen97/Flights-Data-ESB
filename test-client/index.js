@@ -37,12 +37,16 @@ var args = {
     data :{ endpointType: 'REST_API',
             url: 'http://localhost',
             port: port,
-            airline: 'AA',
+            //airline: 'AA',
+            airline: 'B6',
             token: 'richard',
-            username: 'username',
-            password: 'password',
+            //username: 'username',
+            //password: 'password',
+            username: 'admin',
+            password: 'admin',
             requestedFields: ["YEAR"],
-            triggerExpression: 'YEAR > 2015'
+            //triggerExpression: 'YEAR > 2015'
+            triggerExpression: 'YEAR == 2015'
         },
             
     headers: { "Content-Type": "application/json" }

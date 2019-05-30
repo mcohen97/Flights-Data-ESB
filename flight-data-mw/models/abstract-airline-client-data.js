@@ -1,6 +1,6 @@
 const EndpointTypes = require('../data-description/endpoint-types');
 const FlightDataFields = require('../data-description/flight-data-fields');
-const Airlines = require('../data-description/airlines');
+const AirlinesIATACodes = require('../data-description/airlines').Codes;
 const TriggerExpressionParser = require('./trigger-parser');
 
 module.exports = class AirlineClientData{
@@ -27,8 +27,7 @@ module.exports = class AirlineClientData{
         if(!airline){
             throw new Error("The client system's airline must be specified");
         }
-        let allAirlines = Object.keys(Airlines);
-        if(!allAirlines.includes(airline.toUpperCase())){
+        if(!AirlinesIATACodes.includes(airline.toUpperCase())){
             throw new Error(`Airline '${airline}' does not exist`);
         }
   

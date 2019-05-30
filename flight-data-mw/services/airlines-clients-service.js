@@ -1,5 +1,6 @@
 const ClientConnectionFactory = require('../models/connection-factory');
 const AirlineClientDataFactory = require('../models/airline-client-data-factory');
+const AirlinesIATACodes = require('../data-description/airlines').Codes;
 const Jwt = require('jsonwebtoken');
 
 
@@ -9,7 +10,8 @@ module.exports = class AirlinesClientsService {
         this.clientsRepository = airlinesClientsDataRepository;
         this.authentication = authenticationService;
         this.connections= [];
-        this.connectionsIataHash = [];
+        this.connectionsIataHash = {};
+        AirlinesIATACodes.forEach(a => this.connectionsIataHash[a] = []);
     }
 
     async getAll() {
@@ -21,6 +23,7 @@ module.exports = class AirlinesClientsService {
     }
 
     async add(data) {
+        //validate and format data with factory.
         let airlineClientData = AirlineClientDataFactory.createClientData(data)
 
         await this.authentication.login(airlineClientData.username, airlineClientData.password);
@@ -30,7 +33,7 @@ module.exports = class AirlinesClientsService {
         this.connections.push(newConnection);
         this.connectionsIataHash[airlineClientData.airline].push(newConnection);
 
-        this.authentication.deleteUnusedCredential(airlineClientData.username);
+        this.authentication.deleteUsedCredential(airlineClientData.username);
         let token =Jwt.sign({ clientId: airlineClientData.username}, 'JWTSecret');
         return token;
     }

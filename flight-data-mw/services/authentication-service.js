@@ -25,7 +25,7 @@ module.exports= class AuthenticationService{
         return credentials;
     }
 
-    async deleteUnusedCredential(username){
+    async deleteUsedCredential(username){
         this.credentialsRepository.remove(username);
     }
 }
