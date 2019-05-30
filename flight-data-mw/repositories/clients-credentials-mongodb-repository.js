@@ -6,6 +6,7 @@ module.exports = class ClientsCredentialsMemoryRepository extends ClientsCredent
     constructor(){
         super();
         this.credentials= DBContext.Credential;
+        //for test, should be removed in production.
         this.add({username:"username", password:"password"});
         this.add({username:"admin", password:"admin"});
     }
@@ -22,8 +23,11 @@ module.exports = class ClientsCredentialsMemoryRepository extends ClientsCredent
     }
     
     async add(credential){
-        let newCredential = await this.credentials.create(credential);
-        return newCredential.toObject();
+        let newCredential = this.credentials.create(credential);
+        newCredential
+        .then((added)=>  added.toObject())
+        .catch((err) => {});
+        //return newCredential.toObject();
     }
 
     async remove(aUsername){
