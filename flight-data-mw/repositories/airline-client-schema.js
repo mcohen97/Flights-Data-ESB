@@ -2,7 +2,7 @@ const AirlineClientSchema = {
     username: {type: String,unique:true, required: true},
     password: {type: String, required: true },
     triggersIds:{type: [Number]},
-    filtersIds:{type: [Number]},
+    filtersIds:{type: [String]},
     validationsIds:{type: [Number]},
     airline:{type: String, required: true},
     requestedFields:{type: [String]},

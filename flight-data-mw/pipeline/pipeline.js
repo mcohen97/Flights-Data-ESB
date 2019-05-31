@@ -12,4 +12,4 @@ function deferBinding() {
     return implementation;
 }
 
-module.exports = deferBinding;
+module.exports = deferBinding();

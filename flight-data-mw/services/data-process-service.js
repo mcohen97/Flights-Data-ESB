@@ -2,25 +2,36 @@ const DataFieldsTypes = require('../data-description/flight-data-fields-types');
 
 module.exports = class DataProcessService {
 
-    constructor(airlineClientsService) {
+    constructor(airlineClientsService, filteringService) {
         this.clients = airlineClientsService;
+        this.filteringService = filteringService;
     }
 
     async executeTriggers(dataReceived) {
         for (let data of dataReceived) {
             data = formatMessage(data);
             let connections = await this.clients.getByIata(data.AIRLINE);
-            console.log("vuelo de aerolinea: "+ data.AIRLINE);
 
             for(let connection of connections){
                 let trigger = connection.getTrigger();
                 if(trigger(data)){
-                    data.mw_checkout_timestamp = Date.now();
-                    connection.send(data);
+                    filterValidateAndSend(this.filteringService, connection, data);
                 }
             }
         }
     }
+}
+
+function filterValidateAndSend(filteringService, client, data){
+    data.pendingFilters = client.filtersIds.slice();
+    data.clientId = client.username;
+    let processedData =filteringService.processData(data);
+    processedData.then((result) => {
+                console.log("procesado, resultado: ");
+                console.log(result);
+                result.MW_CHECKOUT_TIMESTAMP = Date.now();
+                client.send(result);})
+                 .catch((err) => client.send({error: `${err.toString()} stacktrace: ${err.stack}`}));
 }
 
 function formatMessage(object) {

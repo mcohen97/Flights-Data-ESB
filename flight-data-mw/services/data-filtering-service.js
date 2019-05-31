@@ -9,23 +9,27 @@ module.exports = class DataFilteringService{
     }
     
     async processData(data){
-        return new Promise(function(resolve,reject){
-            this.pipeline.run(data, (err,result) =>{
+        let promise = new Promise(function(resolve,reject){
+
+          this.pipeline.run(data, (err,result) =>{
                 if(err){
                     reject(err);
                 }else{
+                    //console.log("en la promise");
+                    //console.log(result);
                     resolve(result);
                 }
-            })
-        });        
+            });}.bind(this));
+        return promise;       
     }
 }
 
 function setUpPipeline(pipeline){
     let filter;
-    glob.sync( '../filters/*.js' ).forEach( function( file ) {
-        filter = require( path.resolve( file ) );
+    glob.sync( __dirname+ '/../filters/*.js' ).forEach( function( file ) {
+        filter = require(file);
         if(typeof filter == "function"){
+            //console.log("va filtro: "+ filter.name);
             pipeline.use(filter);
         }
     });

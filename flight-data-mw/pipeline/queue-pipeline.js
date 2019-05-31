@@ -4,7 +4,6 @@ const Queue = require('bull');
 class QueuePipeline extends AbstractPipeline {
     constructor() {
         super();
-        this.initialized = false;
         this.queues = [];
         this.callbacks = {};
     }
@@ -19,7 +18,7 @@ class QueuePipeline extends AbstractPipeline {
             this.callbacks[input.clientId] = callback;
             sendToNextQueue(input,this.queues);
         }else{
-            callback(input);
+            callback(null,input);
         }
     }
 }
@@ -35,9 +34,11 @@ function setUpQueue(newQueue,queues,callbacks,filter){
                 if(hasRemainingFilters(result)){
                     sendToNextQueue(result,queues);
                 }else{
+                    //console.log("procesado, se ejecuta el callback:");
+                    //console.log(result);
                     let clientCallback = callbacks[result.clientId];
                     delete callbacks[result.clientId]
-                    clientCallback(result);
+                    clientCallback(null,result);
                 }
                 done();
             }
@@ -50,6 +51,7 @@ function setUpQueue(newQueue,queues,callbacks,filter){
 
  function sendToNextQueue(input,queues){
     let nextFilterId = input.pendingFilters.shift();
+    console.log("next filter: "+ nextFilterId);
     let next = queues.find((q)=>q.name == nextFilterId);
     next.add(input, { removeOnComplete: true }); 
  }

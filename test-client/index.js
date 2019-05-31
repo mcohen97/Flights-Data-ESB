@@ -1,7 +1,7 @@
 let express = require('express');
 let bodyParser = require('body-parser');
 let app = express();
-let port = 3004;
+let port = 3005;
 
 let endpoints = new Array();
 
@@ -37,16 +37,18 @@ var args = {
     data :{ endpointType: 'REST_API',
             url: 'http://localhost',
             port: port,
-            //airline: 'AA',
-            airline: 'B6',
+            airline: 'AA',
+            //airline: 'B6',
             token: 'richard',
-            //username: 'username',
-            //password: 'password',
-            username: 'admin',
-            password: 'admin',
+            username: 'username',
+            password: 'password',
+            //username: 'admin',
+            //password: 'admin',
             requestedFields: ["YEAR"],
-            //triggerExpression: 'YEAR > 2015'
-            triggerExpression: 'YEAR == 2015'
+            filtersIds: ["cancelledToBoolean", "printOnScreen"],
+            //filtersIds: [],
+            triggerExpression: 'YEAR > 2015'
+            //triggerExpression: 'YEAR == 2015'
         },
             
     headers: { "Content-Type": "application/json" }

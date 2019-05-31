@@ -8,9 +8,8 @@ module.exports = class AirlineClientData{
     constructor(data){
         this.username=data.username;
         this.password=data.password;
-        this.triggersIds = data.triggersIds;
-        this.filtersIds = data.filtersIds;
-        this.validationsIds = data.validationsIds;
+        this.filtersIds = data.filtersIds || [];
+        this.validationsIds = data.validationsIds || [];
         this.setAirline(data.airline)
         this.setRequestedFields(data.requestedFields);
         this.setTriggerExpression(data.triggerExpression);
