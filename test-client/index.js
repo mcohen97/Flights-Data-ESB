@@ -38,7 +38,7 @@ var args = {
             url: 'http://localhost',
             port: port,
             //airline: 'AA',
-            airline: 'B6',
+            airline: 'AA',
             token: 'richard',
             //username: 'username',
             //password: 'password',

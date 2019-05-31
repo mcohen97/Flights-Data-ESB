@@ -6,7 +6,7 @@ module.exports.initServer = async function () {
 
     const routes= require('./controllers/router').router;
 
-    app.use(bodyParser.json({ pretty: true }));
+    app.use(bodyParser.json({limit:'50mb', pretty: true }));
     app.use(routes);
 
     let server = app.listen(port, function () {

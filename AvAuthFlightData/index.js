@@ -10,6 +10,7 @@ let dataLength = config.get("publish_config.data_length");
 let interval = config.get("publish_config.interval");
 let port = config.get("port");
 let publish_url = config.get("publish_config.url");
+let initial_line = config.get("publish_config.start_row_index");
 
 const app = new Koa();
 
@@ -20,23 +21,23 @@ app.use(router.allowedMethods());
 app.listen(port);
 
 
-sendMessages(dataLength, interval, publish_url);
+sendMessages(initial_line, dataLength, interval, publish_url);
 
 console.log(`Server started, see http://localhost:${port}`);
 console.log("data length: " + dataLength);
 console.log("interval: " + interval);
 
-async function sendMessages(length, interval, url){
+async function sendMessages(offset,length, interval, url){
     const flightService = new FlightService();
-    let i = 0;
-    //setInterval(async () => {
+    let i = offset;
+    setInterval(async () => {
         let messages = await flightService.getAll(length,i);
         i += length
         for(message of messages)
             message.publisher_checkout_timestamp = Date.now();
-        console.log("sent");
+        console.log("sent"+ i);
         send(messages,url);
-    //}, interval);
+    }, interval);
 }   
 
 async function send(message, url){
