@@ -45,8 +45,7 @@ var args = {
             username: 'admin',
             password: 'admin',
             requestedFields: ["YEAR"],
-            //triggerExpression: 'YEAR > 2015'
-            triggerExpression: 'YEAR == 2015'
+            triggerExpression: 'YEAR > 2014'
         },
             
     headers: { "Content-Type": "application/json" }

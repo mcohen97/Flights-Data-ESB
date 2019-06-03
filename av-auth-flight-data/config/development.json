@@ -1,0 +1,17 @@
+{
+    "repository": {
+        "type": "memory"
+    },
+    "data": {
+        "file_airlines": "./data/airlines.csv",
+        "file_airports": "./data/airports.csv",
+        "file_flights": "./data/flights.csv"
+    },
+    "publish_config":{
+        "start_row_index": 0,
+        "data_length": 5000,
+        "interval": 1000,
+        "url": "http://localhost:6666/publish"
+    },
+    "port":8081
+}

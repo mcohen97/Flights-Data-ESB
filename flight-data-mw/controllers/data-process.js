@@ -1,3 +1,6 @@
+const Queue = require('bull');
+const queue = new Queue("data");
+
 module.exports = class DataProcess{
 
     constructor(dataProcessService){
@@ -9,7 +12,7 @@ module.exports = class DataProcess{
         let message;
         checkInTimestamp(dataList);
         try{
-            this.dataProcessor.executeTriggers(dataList)
+            queue.add(dataList);
             res.status(200);
             message = {
                 message: 'data processed'
