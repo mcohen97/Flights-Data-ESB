@@ -44,8 +44,9 @@ var args = {
             password: 'password',
             //username: 'admin',
             //password: 'admin',
-            requestedFields: ["YEAR"],
+            requestedFields: ["YEAR","CANCELLED"],
             filtersIds: ["cancelledToBoolean", "printOnScreen"],
+            validationsIds: ["validDate","cancelled0or1"],
             //filtersIds: [],
             triggerExpression: 'YEAR > 2015'
             //triggerExpression: 'YEAR == 2015'

@@ -25,6 +25,7 @@ module.exports = class AirlinesClientsService {
     async add(data) {
         //validate and format data with factory.
         let airlineClientData = AirlineClientDataFactory.createClientData(data)
+        console.log(airlineClientData);
 
         await this.authentication.login(airlineClientData.username, airlineClientData.password);
         

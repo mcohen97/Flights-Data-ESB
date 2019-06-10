@@ -1,4 +1,5 @@
 const Pipeline = require('../pipeline/pipeline');
+const DataFields = require('../data-description/flight-data-fields');
 const glob = require('glob');
 
 module.exports = class DataFilteringService{
@@ -15,8 +16,6 @@ module.exports = class DataFilteringService{
                 if(err){
                     reject(err);
                 }else{
-                    //console.log("en la promise");
-                    //console.log(result);
                     resolve(result);
                 }
             });}.bind(this));
@@ -25,12 +24,38 @@ module.exports = class DataFilteringService{
 }
 
 function setUpPipeline(pipeline){
+    //the same pipeline can be reused for validations, field selection and transformations.
     let filter;
     glob.sync( __dirname+ '/../filters/*.js' ).forEach( function( file ) {
         filter = require(file);
         if(typeof filter == "function"){
-            //console.log("va filtro: "+ filter.name);
             pipeline.use(filter);
         }
     });
+    pipeline.use(selectFields);
+    let validation;
+    glob.sync( __dirname+ '/../validations/*.js' ).forEach( function( file ) {
+        validation = require(file);
+        if(typeof validation == "function"){
+            pipeline.use(validation);
+        }
+    });
+}
+
+function selectFields(data, next){
+    console.log("se seleccionan datos");
+    let selectedFields = data.requestedFields;
+    let allFields = Object.keys(DataFields);
+    for(let key in data){
+        //it is important to check if it is a record field, to avoid erasing the message routing metadata.
+        try{
+        if((allFields.includes(key)) && (!selectedFields.includes(key))){
+            delete data[key];
+        }
+        }catch(err){
+            console.log(err.message);
+        }
+    }
+    console.log("datos seleccionados");
+    next(null,data);
 }
