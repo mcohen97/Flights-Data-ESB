@@ -1,5 +1,5 @@
 const FlightRepository = require('../repositories/repository')('flight');
-const CHACHE_SIZE_LIMIT = 100000
+const CACHE_SIZE_LIMIT = 1000001
 
 module.exports = class FlightService {
       constructor() {
@@ -9,12 +9,12 @@ module.exports = class FlightService {
         this.lastRowInMemory = 0;
     }
     async getAll(limit, offset) {
-        if(limit > CHACHE_SIZE_LIMIT)
-            limit = CHACHE_SIZE_LIMIT;
+        if(limit > CACHE_SIZE_LIMIT)
+            limit = CACHE_SIZE_LIMIT;
         if (limit + offset > this.lastRowInMemory || offset < this.firstRowInMemory){
             this.firstRowInMemory = offset;
-            this.lastRowInMemory = offset + CHACHE_SIZE_LIMIT;
-            this.memoryCache = await this.flightRepository.getAll(CHACHE_SIZE_LIMIT,offset);
+            this.lastRowInMemory = offset + CACHE_SIZE_LIMIT;
+            this.memoryCache = await this.flightRepository.getAll(CACHE_SIZE_LIMIT,offset);
         }
         let cacheOffset = offset - this.firstRowInMemory;
         return this.memoryCache.slice(cacheOffset,cacheOffset+limit);
@@ -24,8 +24,8 @@ module.exports = class FlightService {
     }
     async load(){
         this.firstRowInMemory = 0;
-        this.lastRowInMemory = 100000;
-        this.memoryCache = await this.flightRepository.getAll(CHACHE_SIZE_LIMIT,0)
+        this.lastRowInMemory = CACHE_SIZE_LIMIT;
+        this.memoryCache = await this.flightRepository.getAll(CACHE_SIZE_LIMIT,0)
     }
 }
 
