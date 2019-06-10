@@ -1,7 +1,7 @@
 let express = require('express');
 let bodyParser = require('body-parser');
 let app = express();
-let port = 3004;
+let port = 3005;
 
 let endpoints = new Array();
 
@@ -40,10 +40,10 @@ var args = {
             //airline: 'AA',
             airline: 'AA',
             token: 'richard',
-            //username: 'username',
-            //password: 'password',
-            username: 'admin',
-            password: 'admin',
+            username: 'username',
+            password: 'password',
+            //username: 'admin',
+            //password: 'admin',
             requestedFields: ["YEAR"],
             triggerExpression: 'YEAR > 2014'
         },

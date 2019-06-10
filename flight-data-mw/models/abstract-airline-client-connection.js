@@ -1,7 +1,15 @@
 module.exports= class AirlineClient{
 
     constructor(clientData){
-        this.data= clientData;
+        this.username=clientData.username;
+        this.password=clientData.password;
+        this.filtersIds = clientData.filtersIds;
+        this.validationsIds = clientData.validationsIds;
+        this.airline = clientData.airline;
+        this.requestedFields = clientData.requestedFields;
+        this.trigger = clientData.trigger;
+        this.token = clientData.token;
+        this.responseContentType = clientData.responseContentType;
     }
 
     send(data){
@@ -13,7 +21,7 @@ module.exports= class AirlineClient{
     }
 
     getTrigger(){
-        return this.data.trigger;
+        return this.trigger;
     }
 
 }
