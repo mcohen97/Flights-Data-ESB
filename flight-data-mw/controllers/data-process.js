@@ -9,7 +9,7 @@ module.exports = class DataProcess{
         let message;
         checkInTimestamp(dataList);
         try{
-            await this.dataProcessor.executeTriggers(dataList)
+            this.dataProcessor.executeTriggers(dataList)
             res.status(200);
             message = {
                 message: 'data processed'

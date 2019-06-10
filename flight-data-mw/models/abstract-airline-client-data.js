@@ -1,28 +1,32 @@
 const EndpointTypes = require('../data-description/endpoint-types');
 const FlightDataFields = require('../data-description/flight-data-fields');
-const Airlines = require('../data-description/airlines');
+const AirlinesIATACodes = require('../data-description/airlines').Codes;
+const TriggerExpressionParser = require('./trigger-parser');
 
 module.exports = class AirlineClientData{
 
     constructor(data){
         this.username=data.username;
         this.password=data.password;
-        this.triggersIds = data.triggersIds;
-        this.filtersIds = data.filtersIds;
-        this.validationsIds = data.validationsIds;
+        this.filtersIds = data.filtersIds || [];
+        this.validationsIds = data.validationsIds || [];
         this.setAirline(data.airline)
-        this.setRequiredFields(data.requestedFields);
+        this.setRequestedFields(data.requestedFields);
+        this.setTriggerExpression(data.triggerExpression);
         this.setToken(data.token);
         this.setEndpointType(data.endpointType);
         this.setResponseContentType(data.responseContentType);
+    }
+
+    setTriggerExpression(triggerExpression){
+        this.triggerExpression = TriggerExpressionParser.formatTriggerExpression(triggerExpression,this.requestedFields);
     }
 
     setAirline(airline){
         if(!airline){
             throw new Error("The client system's airline must be specified");
         }
-        let allAirlines = Object.keys(Airlines);
-        if(!allAirlines.includes(airline.toUpperCase())){
+        if(!AirlinesIATACodes.includes(airline.toUpperCase())){
             throw new Error(`Airline '${airline}' does not exist`);
         }
   
@@ -54,7 +58,7 @@ module.exports = class AirlineClientData{
         this.responseContentType = responseContentType;
     }
 
-    setRequiredFields(requestedFields){
+    setRequestedFields(requestedFields){
         if(!requestedFields){
             throw new Error('The requested fields must be specified')
         }

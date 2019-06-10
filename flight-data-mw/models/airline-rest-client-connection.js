@@ -12,10 +12,11 @@ module.exports= class AirlineRestClient extends AirlineClient{
     async send(data){
         let client = new Client();
         let endpoint = `${this.url}:${this.port}`;
-        console.log("ENVIANDO...")
-        let req = client.post(endpoint, data, function (received, response) {
-            console.log(received);
-            console.log(response);
+        let args = {
+            data: data,
+            headers: { "Content-Type": "application/json" }
+        };
+        let req = client.post(endpoint, args, function (received, response) {
         });
 
         req.on('requestTimeout', function (req) {

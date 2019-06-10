@@ -1,42 +1,62 @@
-const ConnectionFactory = require('../models/connection-factory');
+const DataFieldsTypes = require('../data-description/flight-data-fields-types');
 
-module.exports = class DataProcessService{
-    
-    constructor(triggersRepository, clientsRepository){
-        this.triggers = triggersRepository;
-        this.clientsRepository = clientsRepository;
+module.exports = class DataProcessService {
+
+    constructor(airlineClientsService, filteringService) {
+        this.clients = airlineClientsService;
+        this.filteringService = filteringService;
     }
 
-    async executeTriggers(dataReceived){
-        let triggers = await this.triggers.getAll();
-        for(let data of dataReceived){
-            for (let trigger of triggers){
-                if(trigger.isExecutedBy(data))
-                    this.executeTrigger(trigger,data)
-            }            
-        }
-            
-    }
+    async executeTriggers(dataReceived) {
+        for (let data of dataReceived) {
+            data = formatMessage(data);
+            let connections = await this.clients.getByIata(data.AIRLINE);
 
-    async executeTrigger(trigger, dataToSend){     //should be in trigger model?
-        let clientsUsernames = trigger.subscribers;
-        let clientsData = await this.clientsRepository.getAll();
-        for (let clientData of clientsData){
-            if(clientsUsernames.includes(clientData.username))
-                activateTrigger(trigger,dataToSend,clientData);
+            for(let connection of connections){
+                let trigger = connection.getTrigger();
+                if(trigger(data)){
+                    filterValidateAndSend(this.filteringService, connection, data);
+                }
+            }
         }
-            
     }
 }
 
-async function activateTrigger(trigger, dataToSend, clientData){
-    //await transformations and filters, finally send data to client
-    let connection = ConnectionFactory.createConnection(clientData);
-    dataToSend.mw_checkout_timestamp = Date.now();
-    let args = {
-        data: { publication: dataToSend},
-        headers: { "Content-Type": "application/json" }
-    };
-    connection.send(args);
+function filterValidateAndSend(filteringService, client, data){
+    data.pendingFilters = client.filtersIds.slice();
+    data.clientId = client.username;
+    let processedData =filteringService.processData(data);
+    processedData.then((result) => {
+                console.log("procesado, resultado: ");
+                console.log(result);
+                result.MW_CHECKOUT_TIMESTAMP = Date.now();
+                client.send(result);})
+                 .catch((err) => client.send({error: `${err.toString()} stacktrace: ${err.stack}`}));
 }
 
+function formatMessage(object) {
+    let keys = Object.keys(object);
+    let n = keys.length;
+    let newobj = {}
+    let key;
+    while (n--) {
+        key = keys[n];
+        let data = castType(key,object);
+        newobj[key.toUpperCase()] = data;
+    }
+    return newobj;
+}
+
+function castType(key,object){
+  let dataType = DataFieldsTypes[key.toUpperCase()];
+  switch(dataType){
+      case Number:
+        return Number(object[key]);
+      break;
+      default:
+        return object[key];
+      break;
+    //add more cases if needed.
+  }
+
+}

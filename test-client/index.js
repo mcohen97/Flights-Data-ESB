@@ -8,7 +8,7 @@ let endpoints = new Array();
 app.use(bodyParser.json());
 
 app.post('/', function (req, res) {
-    req.body.publication.client_checkin_timestamp = Date.now();
+    //req.body.publication.client_checkin_timestamp = Date.now();
     console.log(req.body);
 
     res.status(200);
@@ -38,10 +38,19 @@ var args = {
             url: 'http://localhost',
             port: port,
             airline: 'AA',
+            //airline: 'B6',
             token: 'richard',
-            username: 'admin',
-            password: 'admin',
-            requiredFields: ["YEAR"]},
+            username: 'username',
+            password: 'password',
+            //username: 'admin',
+            //password: 'admin',
+            requestedFields: ["YEAR"],
+            filtersIds: ["cancelledToBoolean", "printOnScreen"],
+            //filtersIds: [],
+            triggerExpression: 'YEAR > 2015'
+            //triggerExpression: 'YEAR == 2015'
+        },
+            
     headers: { "Content-Type": "application/json" }
 };
 
