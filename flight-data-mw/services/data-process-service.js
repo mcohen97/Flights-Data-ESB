@@ -32,7 +32,7 @@ function filterValidateAndSend(filteringService, client, data){
     processedData.then((result) => {
                 console.log("procesado, resultado: ");
                 result.MW_CHECKOUT_TIMESTAMP = Date.now();
-                //delete metadata.
+                //delete pipeline routing metadata.
                 delete result.pendingFilters;
                 delete result.pendingValidations;
                 delete result.fieldsSelected;

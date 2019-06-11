@@ -38,18 +38,13 @@ var args = {
             url: 'http://localhost',
             port: port,
             airline: 'AA',
-            //airline: 'B6',
-            token: 'richard',
+            token: 'token',
             username: 'username',
             password: 'password',
-            //username: 'admin',
-            //password: 'admin',
             requestedFields: ["YEAR","CANCELLED"],
             filtersIds: ["cancelledToBoolean", "printOnScreen"],
             validationsIds: ["validDate","cancelled0or1"],
-            //filtersIds: [],
             triggerExpression: 'YEAR > 2015'
-            //triggerExpression: 'YEAR == 2015'
         },
             
     headers: { "Content-Type": "application/json" }

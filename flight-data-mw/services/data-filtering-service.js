@@ -41,19 +41,14 @@ function setUpPipeline(pipeline){
         }
     });
 }
-
+//field selection filter, not dynamically provided.
 function selectFields(data, next){
-    console.log("se seleccionan datos");
     let selectedFields = data.requestedFields;
     let allFields = Object.keys(DataFields);
     for(let key in data){
         //it is important to check if it is a record field, to avoid erasing the message routing metadata.
-        try{
         if((allFields.includes(key)) && (!selectedFields.includes(key))){
             delete data[key];
-        }
-        }catch(err){
-            console.log(err.message);
         }
     }
     console.log("datos seleccionados");
