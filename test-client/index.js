@@ -37,18 +37,15 @@ var args = {
     data :{ endpointType: 'REST_API',
             url: 'http://localhost',
             port: port,
+            //airline: 'AA',
             airline: 'AA',
-            //airline: 'B6',
             token: 'richard',
             username: 'username',
             password: 'password',
             //username: 'admin',
             //password: 'admin',
             requestedFields: ["YEAR"],
-            filtersIds: ["cancelledToBoolean", "printOnScreen"],
-            //filtersIds: [],
-            triggerExpression: 'YEAR > 2015'
-            //triggerExpression: 'YEAR == 2015'
+            triggerExpression: 'YEAR > 2014'
         },
             
     headers: { "Content-Type": "application/json" }

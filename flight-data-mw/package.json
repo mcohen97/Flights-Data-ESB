@@ -14,13 +14,15 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "bull": "^3.9.1",
+    "bluebird": "^3.5.5",
+    "bull": "^3.10.0",
     "config": "^3.1.0",
     "expr-eval": "^1.2.2",
     "express": "^4.16.4",
     "glob": "^7.1.4",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.5.10",
-    "node-rest-client": "^3.1.0"
+    "node-rest-client": "^3.1.0",
+    "redis": "^2.8.0"
   }
 }

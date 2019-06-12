@@ -1,3 +1,4 @@
+
 module.exports.initServer = async function () {
     const express = require('express');
     const bodyParser = require('body-parser');
@@ -6,7 +7,7 @@ module.exports.initServer = async function () {
 
     const routes= require('./controllers/router').router;
 
-    app.use(bodyParser.json({ pretty: true }));
+    app.use(bodyParser.json({limit:'999mb', pretty: true }));
     app.use(routes);
 
     let server = app.listen(port, function () {
