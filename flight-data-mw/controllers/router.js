@@ -9,6 +9,9 @@ const DataProcessor = require('./data-process');
 const DataFilteringService = require('../services/data-filtering-service');
 const router = express.Router();
 
+const Queue = require('bull');
+const queue = new Queue("data");
+
 const airlinesServicesRepository = new AirlinesClientsRepository();
 const clientsCredentialsRepository = new ClientsCredentialsRepository();
 const authService = new AuthenticationService(clientsCredentialsRepository,airlinesServicesRepository);
@@ -21,5 +24,14 @@ const dataProcessor = new DataProcessor(dataProccesService);
 
 router.post('/register', (req, res) => clients.register(req,res));
 router.post('/publish', (req,res) => dataProcessor.publish(req,res));
+
+let jobNumber = 1;
+queue.process(2,(job,done) =>{
+    console.log("job processed - "+jobNumber);
+    console.log("   data length: "+job.data.length);
+    jobNumber++;
+    dataProccesService.executeTriggers(job.data);
+    done();
+})
 
 module.exports = {router, service: clientsService};

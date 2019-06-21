@@ -57,6 +57,7 @@ module.exports = class AirlinesClientsService {
             this.connections.push(conn);
             this.connectionsIataHash[c.airline].push(conn);
         });
+        
     }
 
 }

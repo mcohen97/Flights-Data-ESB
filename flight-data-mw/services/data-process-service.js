@@ -1,5 +1,6 @@
 const DataFieldsTypes = require('../data-description/flight-data-fields-types');
 
+
 module.exports = class DataProcessService {
 
     constructor(airlineClientsService, filteringService) {
@@ -11,6 +12,7 @@ module.exports = class DataProcessService {
         for (let data of dataReceived) {
             data = formatMessage(data);
             let connections = await this.clients.getByIata(data.AIRLINE);
+            //console.log("vuelo de aerolinea: "+ data.AIRLINE);
 
             for(let connection of connections){
                 let trigger = connection.getTrigger();
@@ -27,6 +29,8 @@ function filterValidateAndSend(filteringService, client, data){
     data.fieldsSelected = false;
     data.requestedFields = client.requestedFields.slice();
     data.pendingFilters = client.filtersIds.slice();
+    data.transformedToContentType = false;
+    data.contentType = client.responseContentType;
     data.clientId = client.username;
     let processedData =filteringService.processData(data);
     processedData.then((result) => {

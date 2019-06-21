@@ -8,6 +8,8 @@ module.exports = class ClientsCredentialsMemoryRepository extends ClientsCredent
         this.credentials= DBContext.Credential;
         //for test, should be removed in production.
         this.add({username:"username", password:"password"});
+        this.add({username:"userb6", password:"userb6"});
+        this.add({username:"userua ", password:"userua"});
         this.add({username:"admin", password:"admin"});
     }
     

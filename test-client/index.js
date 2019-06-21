@@ -1,11 +1,14 @@
 let express = require('express');
 let bodyParser = require('body-parser');
+let xmlparser = require('express-xml-bodyparser');
+//let xmlparser = require('xml2js');
 let app = express();
 let port = 3005;
 
-let endpoints = new Array();
 
 app.use(bodyParser.json());
+app.use(xmlparser());
+
 
 app.post('/', function (req, res) {
     //req.body.publication.client_checkin_timestamp = Date.now();
@@ -45,6 +48,7 @@ var args = {
             filtersIds: ["cancelledToBoolean", "printOnScreen"],
             validationsIds: ["validDate","cancelled0or1"],
             triggerExpression: 'YEAR > 2015'
+
         },
             
     headers: { "Content-Type": "application/json" }
