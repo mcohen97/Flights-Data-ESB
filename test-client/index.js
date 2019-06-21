@@ -56,8 +56,6 @@ var args = {
 
 try{
     client.post("http://localhost:6666/register", args, function (data, response) {
-        // parsed response body as js object
-        //console.log("llego dato");
         console.log(data);
     });
 }catch(error){

@@ -1,57 +1,74 @@
 const Parser = require('expr-eval').Parser;
+const DataFields = require('../data-description/flight-data-fields');
 
 const parser = new Parser();
 
-function formatTriggerExpression(expression,clientRequestedFields){
-    let parsedExpression = parseExpression(expression, clientRequestedFields);
-    return parsedExpression.toString();
+function formatTriggerExpression(expression){
+    let parsedExpression = parseExpression(expression);
+    let expressionString = parsedExpression.toString();
+    checkIfBooleanExpression(parsedExpression);
+    return expressionString;
 }
 
-function createFunctionFromTriggerExpression(expression, clientRequestedFields) {
-    let parsedExpression = parseExpression(expression, clientRequestedFields);
+function checkIfBooleanExpression(parsedExpression){
+    wrapVariablesInObject(parsedExpression);
+    let fun = parsedExpression.toJSFunction("data"); 
+    //An empty object is enough for infering the function return type.
+    let typeFun = typeof fun({});
+    if(typeFun != "boolean"){
+        throw new Error("The function is not boolean");
+    }
+}
+
+function createFunctionFromTriggerExpression(expression) {
+    let parsedExpression = parseExpression(expression);
     wrapVariablesInObject(parsedExpression);
     return parsedExpression.toJSFunction("data");   
 }
 module.exports.formatTriggerExpression = formatTriggerExpression;
 module.exports.createFunctionFromTriggerExpression= createFunctionFromTriggerExpression;
 
-function parseExpression(expression, clientRequestedFields){        
+function parseExpression(expression){        
     //make sure connectives are lowercase, otherwise the parser fails.
     expression = expression.toLowerCase();
-
-    let parsedExpression = parser.parse(expression);
-    validateAndSanitizeVariables(parsedExpression, clientRequestedFields);
+    let parsedExpression;
+    try{
+        parsedExpression = parser.parse(expression);
+    }catch(error){
+        throw new Error('Invalid expression');
+    }
+    validateAndSanitizeVariables(parsedExpression);
     return parsedExpression;
 }
 
-function validateAndSanitizeVariables(parsedExpression, clientRequestedFields){
+function validateAndSanitizeVariables(parsedExpression){
     let tokens = parsedExpression.tokens;
 
     //make all variables be members of an object named "data".
-    let bfs = function bfs(tokens) {
+    let visitTreeNodes = function visitTreeNodes(tokens) {
         for (let i = 0; i < tokens.length; i++) {
             let token = tokens[i];
             if (token.type == 'IVAR'){ 
                 //variables in expression go in uppercase.
                 token.value = token.value.toUpperCase();
                 tokens[i] = token;
-                if(!clientRequestedFields.includes(token.value)) {
-                    throw new Error(`The Field ${token.value} was not requested`);
+                if(!DataFields.includes(token.value)) {
+                    throw new Error(`The Field ${token.value} does not exist`);
                 }                
             }
             if (token.type == 'IEXPR') {
-                bfs(token.value);
+                visitTreeNodes(token.value);
             }
         }
     }
-    bfs(tokens);
+    visitTreeNodes(tokens);
 }
 
 function wrapVariablesInObject(parsedExpression){
     let tokens = parsedExpression.tokens;
 
     //make all variables be members of an object named "data"
-    let bfs = function bfs(tokens) {
+    let visitTreeNodes = function visitTreeNodes(tokens) {
         for (let i = 0; i < tokens.length; i++) {
             let token = tokens[i];
             if (token.type == 'IVAR') {
@@ -59,10 +76,10 @@ function wrapVariablesInObject(parsedExpression){
                 tokens.splice(i, 0, { type: 'IVAR', value: 'data' });
             }
             if (token.type == 'IEXPR') {
-                bfs(token.value);
+                visitTreeNodes(token.value);
             }
         }
     }
-    bfs(tokens);
+    visitTreeNodes(tokens);
     parsedExpression.tokens = tokens;
 }

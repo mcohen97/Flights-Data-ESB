@@ -13,7 +13,6 @@ module.exports= class AirlineRestClient extends AirlineClient{
     async send(data){
         let client = new Client();
         let endpoint = `${this.url}:${this.port}`;
-        console.log(data);
         let args = {
             data: toContentType(data, this.responseContentType),
             headers: { "Content-Type": getContentTypeHeader(this.responseContentType) }

@@ -19,7 +19,7 @@ module.exports = class AirlineClientData{
     }
 
     setTriggerExpression(triggerExpression){
-        this.triggerExpression = TriggerExpressionParser.formatTriggerExpression(triggerExpression,this.requestedFields);
+        this.triggerExpression = TriggerExpressionParser.formatTriggerExpression(triggerExpression);
     }
 
     setAirline(airline){
@@ -62,9 +62,8 @@ module.exports = class AirlineClientData{
         if(!requestedFields){
             throw new Error('The requested fields must be specified')
         }
-        let allFields = Object.keys(FlightDataFields);
         requestedFields.forEach(field => {
-            if(!allFields.includes(field.toUpperCase())){
+            if(!FlightDataFields.includes(field.toUpperCase())){
                 throw new Error(`Flight data field '${field}' does not exist`);
             }
         });
