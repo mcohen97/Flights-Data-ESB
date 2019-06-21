@@ -3,8 +3,8 @@ const DataFieldsTypes = require('../data-description/flight-data-fields-types');
 
 module.exports = class DataProcessService {
 
-    constructor(airlineClientsService, filteringService) {
-        this.clients = airlineClientsService;
+    constructor(connectionsService, filteringService) {
+        this.clients = connectionsService;
         this.filteringService = filteringService;
     }
 
@@ -12,7 +12,6 @@ module.exports = class DataProcessService {
         for (let data of dataReceived) {
             data = formatMessage(data);
             let connections = await this.clients.getByIata(data.AIRLINE);
-            //console.log("vuelo de aerolinea: "+ data.AIRLINE);
 
             for(let connection of connections){
                 let trigger = connection.getTrigger();

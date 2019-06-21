@@ -20,5 +20,4 @@ module.exports.initServer = async function () {
 
     const service = require('./controllers/router').service;
     service.loadPreviousRegisteredClients();
-    //setInterval(() => service.updateClients(),2500);
 }

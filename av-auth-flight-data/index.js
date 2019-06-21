@@ -31,14 +31,14 @@ async function sendMessages(offset,length, interval, url){
     const flightService = new FlightService();
     await flightService.load();
     let i = offset;
-    setInterval(async () => {
+    //setInterval(async () => {
         let messages = await flightService.getAll(length,i);
         i += length
         for(message of messages)
             message.publisher_checkout_timestamp = Date.now();
         console.log("sent"+ i);
         send(messages,url);
-    }, interval);
+    //}, interval);
 }   
 
 function send(message, url){

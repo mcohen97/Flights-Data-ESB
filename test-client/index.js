@@ -3,7 +3,7 @@ let bodyParser = require('body-parser');
 let xmlparser = require('express-xml-bodyparser');
 //let xmlparser = require('xml2js');
 let app = express();
-let port = 3005;
+let port = 3004;
 
 
 app.use(bodyParser.json());
