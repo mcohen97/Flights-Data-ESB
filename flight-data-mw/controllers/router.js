@@ -7,6 +7,8 @@ const DataProcessService =  require('../services/data-process-service');
 const ServiceRegistry = require('./service-registry');
 const DataProcessor = require('./data-process');
 const DataFilteringService = require('../services/data-filtering-service');
+const ConnectionsService = require('../services/connections-service');
+
 const router = express.Router();
 
 const Queue = require('bull');
@@ -16,9 +18,9 @@ const airlinesServicesRepository = new AirlinesClientsRepository();
 const clientsCredentialsRepository = new ClientsCredentialsRepository();
 const authService = new AuthenticationService(clientsCredentialsRepository,airlinesServicesRepository);
 const filteringService = new DataFilteringService();
-
-const clientsService = new AirlinesClientsService(airlinesServicesRepository, authService);
-const dataProccesService = new DataProcessService(clientsService,filteringService);
+const connectionsService = new ConnectionsService(airlinesServicesRepository);
+const clientsService = new AirlinesClientsService(airlinesServicesRepository, authService,connectionsService);
+const dataProccesService = new DataProcessService(connectionsService,filteringService);
 const clients = new ServiceRegistry(clientsService);
 const dataProcessor = new DataProcessor(dataProccesService);
 
@@ -34,4 +36,4 @@ queue.process(2,(job,done) =>{
     done();
 })
 
-module.exports = {router, service: clientsService};
+module.exports = {router, service: connectionsService};

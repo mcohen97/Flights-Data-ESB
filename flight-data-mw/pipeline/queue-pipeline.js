@@ -28,17 +28,17 @@ function setUpQueue(newQueue,queues,callbacks,filter){
     newQueue.process((job, done) => {
         filter.call(this, job.data, (err, result) => {
             if (err) {
-                this.emit('error', err);
-                done(err);
+                console.log("HAY UN ERROR: "+ err.message);
+                done();
             } else {
                 if(hasRemainingFilters(result)){
                     sendToNextQueue(result,queues);
                 }else{
-                    //console.log("procesado, se ejecuta el callback:");
-                    //console.log(result);
                     let clientCallback = callbacks[result.clientId];
                     delete callbacks[result.clientId]
-                    clientCallback(null,result);
+                    //the last filter
+                    //toContentType(result,(error,processedData) =>clientCallback(error,processedData))
+                    clientCallback(null, result);
                 }
                 done();
             }
@@ -46,12 +46,32 @@ function setUpQueue(newQueue,queues,callbacks,filter){
     });
 }
  function hasRemainingFilters(message){
-    return message.pendingFilters.length > 0;
+    return message.pendingFilters.length > 0 || !message.fieldsSelected ||message.pendingValidations > 0;
  }
 
  function sendToNextQueue(input,queues){
-    let nextFilterId = input.pendingFilters.shift();
-    console.log("next filter: "+ nextFilterId);
+    let nextFilterId;
+    if(input.pendingValidations.length >0){
+     //validations first.
+     nextFilterId = input.pendingValidations.shift();
+    }else if (!input.fieldsSelected){
+     //when validations are finished, select fields.
+     nextFilterId = "selectFields";
+     input.fieldsSelected = true;
+    }else{
+     //then we transform the remaining fields.
+     nextFilterId = input.pendingFilters.shift();
+    }
+    /*else if(input.pendingFilters.length >0){
+     //then we transform the remaining fields.
+     nextFilterId = input.pendingFilters.shift();
+    }*/
+    /*else{
+     //then the content type.
+      nextFilterId = "toContentType";
+      input.transformedToContentType = true;
+    }*/
     let next = queues.find((q)=>q.name == nextFilterId);
     next.add(input, { removeOnComplete: true }); 
  }
+
