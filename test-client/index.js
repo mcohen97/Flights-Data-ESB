@@ -11,9 +11,12 @@ app.use(xmlparser());
 
 
 app.post('/', function (req, res) {
-    //req.body.publication.client_checkin_timestamp = Date.now();
+    console.log("\n");
+    console.log("----- PUBLICACION -----");
     console.log(req.body);
-
+    let mwTimeDifference = req.body["MW_CHECKOUT_TIMESTAMP"] - req.body["MW_CHECKIN_TIMESTAMP"];
+    console.log("----- TIME IN MW: "+mwTimeDifference+" -----");
+    
     res.status(200);
     res.json({
         message: 'ok got response!'
@@ -44,10 +47,10 @@ var args = {
             token: 'token',
             username: 'username',
             password: 'password',
-            requestedFields: ["YEAR","CANCELLED"],
+            requestedFields: ["FLIGHT_NUMBER","YEAR","CANCELLED"],
             filtersIds: ["cancelledToBoolean", "printOnScreen"],
             validationsIds: ["validDate","cancelled0or1"],
-            triggerExpression: 'YEAR > 2015'
+            triggerExpression: 'YEAR >= 2015'
 
         },
             

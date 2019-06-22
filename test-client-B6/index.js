@@ -45,10 +45,10 @@ var args = {
             token: 'tokenb6',
             username: 'userb6',
             password: 'userb6',
-            requestedFields: ["YEAR", "FLIGHT_NUMBER"],
+            requestedFields: [ "FLIGHT_NUMBER","YEAR"],
             filtersIds: ["cancelledToBoolean", "printOnScreen"],
             validationsIds: ["validDate","cancelled0or1"],
-            triggerExpression: 'YEAR > 2014'
+            triggerExpression: 'YEAR >= 2014'
         },
             
     headers: { "Content-Type": "application/json" }
