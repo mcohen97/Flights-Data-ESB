@@ -9,12 +9,14 @@ const ServiceAssistance = require('./service-assistance');
 const DataFilteringService = require('../services/data-transformation-service');
 const ConnectionsService = require('../services/connections-service');
 const DataProcessService = require('../services/data-process-service');
+const FiltersRepository = require('../repositories/filters-repository');
+const InformationService = require('../services/info-service');
+
 
 const router = express.Router();
 
 const Queue = require('bull');
 const queue = new Queue("data");
-
 
 const airlinesServicesRepository = new AirlinesClientsRepository();
 const clientsCredentialsRepository = new ClientsCredentialsRepository();
@@ -23,7 +25,9 @@ const filteringService = new DataFilteringService();
 const connectionsService = new ConnectionsService(airlinesServicesRepository);
 const clientsService = new AirlinesClientsService(airlinesServicesRepository, authService,connectionsService);
 const serviceRegistry = new ServiceRegistry(clientsService);
-const serviceAssistance = new ServiceAssistance(clientsService);
+const filtersRepository = new FiltersRepository();
+const informationService= new InformationService(filtersRepository);
+const serviceAssistance = new ServiceAssistance(clientsService,informationService);
 const dataProccesService = new DataProcessService(connectionsService,filteringService);
 
 let jobNumber = 1;
@@ -31,6 +35,7 @@ let jobNumber = 1;
 
 router.post('/register', (req, res) => serviceRegistry.register(req,res));
 router.put('/update/:username',(req, res) => serviceAssistance.updateServiceData(req,res));
+router.get('/info',(req, res) => serviceAssistance.getActionsCatalog(req,res));
 
 queue.process(2,(job,done) =>{
     console.log("job processed - "+jobNumber);
@@ -41,3 +46,6 @@ queue.process(2,(job,done) =>{
 })
 
 module.exports = {router, service: connectionsService};
+
+
+filtersRepository.onTransformationAdded(texty => console.log(texty));

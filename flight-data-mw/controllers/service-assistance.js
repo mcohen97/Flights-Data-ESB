@@ -1,8 +1,9 @@
 
 module.exports = class ServiceAssistance{
 
-    constructor(airlineServiceStorage){
+    constructor(airlineServiceStorage, informationService){
         this.clients = airlineServiceStorage;
+        this.info = informationService;
     }
 
     async updateServiceData(req,res){
@@ -23,5 +24,10 @@ module.exports = class ServiceAssistance{
             };
         }
         res.json(message);
+    }
+
+    async getActionsCatalog(req,res){
+        let catalog = this.info.getCatalogInformation();
+        res.json(catalog)
     }
 }

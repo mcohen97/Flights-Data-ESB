@@ -34,7 +34,6 @@ module.exports = class ConnectionsService {
             let service = this.connections[i];
             if(service.username == username){
                 updateFields(service,updatedData);
-                console.log(this.connections);
                 break;
             }
         }
@@ -48,7 +47,6 @@ module.exports = class ConnectionsService {
             this.connections.push(conn);
             this.connectionsIataHash[c.airline].push(conn);
         });
-        console.log(this.connections);
     }
 }
 

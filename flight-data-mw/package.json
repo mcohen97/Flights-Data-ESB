@@ -16,6 +16,7 @@
     "axios": "^0.18.0",
     "bluebird": "^3.5.5",
     "bull": "^3.10.0",
+    "chokidar": "^3.0.1",
     "config": "^3.1.0",
     "expr-eval": "^1.2.2",
     "express": "^4.16.4",

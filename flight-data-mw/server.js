@@ -12,7 +12,7 @@ module.exports.initServer = async function () {
 
     const mwsecret  = Config.get('credentials.secret') ;
 
-    app.use(jwt({credentialsRequired: true, secret: mwsecret}).unless({path: [/^\/register/]}));
+    app.use(jwt({credentialsRequired: true, secret: mwsecret}).unless({path: [/^\/register|info/]}));
     app.use(function(err, req, res, next) {
         if(err.name === 'UnauthorizedError') {
           res.status(err.status).send({message:err.message});
