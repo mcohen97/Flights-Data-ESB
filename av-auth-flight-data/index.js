@@ -48,7 +48,7 @@ async function sendMessages(offset,length, interval, count, url){
 function send(message, url){
     axios.post(url, message)
     .then((response) => {
-        console.log(`Response: ${response.statusCode}`)
+        console.log(`Response: ${response.status}`)
     })
     .catch((error) => {
         console.error("Error: "+error.code)

@@ -3,9 +3,7 @@ const AirlinesClientsRepository = require('../repositories/repository')('airline
 const ClientsCredentialsRepository = require('../repositories/repository')('clients-credentials');
 const AirlinesClientsService = require('../services/airlines-clients-service');
 const AuthenticationService = require('../services/authentication-service');
-const DataProcessService =  require('../services/data-process-service');
 const ServiceRegistry = require('./service-registry');
-const DataProcessor = require('./data-process');
 const DataFilteringService = require('../services/data-filtering-service');
 const ConnectionsService = require('../services/connections-service');
 
@@ -20,14 +18,11 @@ const authService = new AuthenticationService(clientsCredentialsRepository,airli
 const filteringService = new DataFilteringService();
 const connectionsService = new ConnectionsService(airlinesServicesRepository);
 const clientsService = new AirlinesClientsService(airlinesServicesRepository, authService,connectionsService);
-const dataProccesService = new DataProcessService(connectionsService,filteringService);
 const clients = new ServiceRegistry(clientsService);
-const dataProcessor = new DataProcessor(dataProccesService);
-
-router.post('/register', (req, res) => clients.register(req,res));
-router.post('/publish', (req,res) => dataProcessor.publish(req,res));
 
 let jobNumber = 1;
+
+router.post('/register', (req, res) => clients.register(req,res));
 queue.process(2,(job,done) =>{
     console.log("job processed - "+jobNumber);
     console.log("   data length: "+job.data.length);

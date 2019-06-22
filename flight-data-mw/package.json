@@ -20,6 +20,7 @@
     "expr-eval": "^1.2.2",
     "express": "^4.16.4",
     "glob": "^7.1.4",
+    "js2xmlparser": "^4.0.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
     "mongoose": "^5.5.10",
