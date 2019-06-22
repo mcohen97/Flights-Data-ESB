@@ -5,5 +5,9 @@
     },
     "pipeline":{
         "pipe": "queue"
+    },
+    "credentials":{
+        "secret":"ObligatorioArqSoft"
     }
+
 }

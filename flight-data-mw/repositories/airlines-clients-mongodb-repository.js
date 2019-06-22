@@ -21,4 +21,18 @@ module.exports = class AirlinesServicesMongoDBRepository extends AirlinesClients
         let found = await this.airlineClients.findOne({username:clientUsername});
         return found ? true : false;
     }
+
+    async update(airlineService){
+        let conditions = { username: airlineService.username};
+        //the username can never be changed.
+        delete airlineService.username;
+        let update = { $set: airlineService}
+        let options = {};
+        this.airlineClients.updateOne(conditions, update, options, callback);
+    }
+
 }
+
+function callback (err, numAffected) {
+    // numAffected is the number of updated documents
+  }

@@ -1,6 +1,7 @@
 const AirlineClientDataFactory = require('../models/airline-client-data-factory');
 const Jwt = require('jsonwebtoken');
 const ConnectionPublisher = require('./connection-publisher');
+const Config = require('config');
 
 module.exports = class AirlinesClientsService {
 
@@ -12,7 +13,7 @@ module.exports = class AirlinesClientsService {
 
     async add(data) {
         //validate and format data with factory.
-        let airlineClientData = AirlineClientDataFactory.createClientData(data)
+        let airlineClientData = AirlineClientDataFactory.createClientData(data);
 
         await this.authentication.login(airlineClientData.username, airlineClientData.password);
         
@@ -20,7 +21,19 @@ module.exports = class AirlinesClientsService {
         this.newConnections.publish(airlineClientData);
 
         this.authentication.deleteUsedCredential(airlineClientData.username);
-        let token =Jwt.sign({ clientId: airlineClientData.username}, 'JWTSecret');
+        let token =Jwt.sign({ clientId: airlineClientData.username}, Config.get('credentials.secret'));
         return token;
+    }
+
+    async update(username,data){
+        let exists = await this.clientsRepository.exists(username);
+        //validate and format data with factory.
+        let airlineClientData = AirlineClientDataFactory.createClientData(data);     
+        if(!exists){
+            throw new Error('Cannot update, service does not exist');
+        }else{
+            this.clientsRepository.update(airlineClientData);
+        }
+        return true;
     }
 }

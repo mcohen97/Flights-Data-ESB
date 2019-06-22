@@ -8,4 +8,7 @@ module.exports = class AirlinesClientsRepository{
     async exists(airlineService){
         throw new Error('Not implemented');
     }
+    async update(airlineService){
+        throw new Error('Not implemented');
+    }
 }
