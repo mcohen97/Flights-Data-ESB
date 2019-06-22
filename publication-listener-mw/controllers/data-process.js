@@ -3,8 +3,7 @@ const queue = new Queue("data");
 
 module.exports = class DataProcess{
 
-    constructor(dataProcessService){
-        this.dataProcessor = dataProcessService;
+    constructor(){
     }
 
     async publish(req,res){
