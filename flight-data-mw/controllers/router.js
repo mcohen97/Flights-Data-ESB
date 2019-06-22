@@ -25,6 +25,7 @@ const dataProccesService = new DataProcessService(connectionsService,filteringSe
 let jobNumber = 1;
 
 router.post('/register', (req, res) => clients.register(req,res));
+
 queue.process(2,(job,done) =>{
     console.log("job processed - "+jobNumber);
     console.log("   data length: "+job.data.length);
