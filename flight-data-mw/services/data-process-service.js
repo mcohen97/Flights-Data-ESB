@@ -23,7 +23,7 @@ module.exports = class DataProcessService {
     }
 }
 
-function filterValidateAndSend(filteringService, client, data){
+async function filterValidateAndSend(filteringService, client, data){
 
     let processedData =filteringService.applyTransformations(data,client);
     processedData.then((result) => {
