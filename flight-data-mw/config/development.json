@@ -8,6 +8,9 @@
     },
     "credentials":{
         "secret":"ObligatorioArqSoft"
+    },
+    "logger": {
+        "type": "file"
     }
 
 }

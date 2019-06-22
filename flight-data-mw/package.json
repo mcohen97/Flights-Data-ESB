@@ -13,6 +13,7 @@
     "mocha": "^6.1.4"
   },
   "dependencies": {
+    "logger": "../logger/",
     "axios": "^0.18.0",
     "bluebird": "^3.5.5",
     "bull": "^3.10.0",
@@ -24,6 +25,7 @@
     "glob": "^7.1.4",
     "js2xmlparser": "^4.0.0",
     "jsonwebtoken": "^8.5.1",
+    "log4js": "^4.3.2",
     "moment": "^2.24.0",
     "mongoose": "^5.5.10",
     "node-rest-client": "^3.1.0",
