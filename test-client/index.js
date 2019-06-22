@@ -29,8 +29,6 @@ var server = app.listen(port, function () {
 
 });
 
-
-
 var Client = require('node-rest-client').Client;
  
 var client = new Client();
@@ -44,7 +42,7 @@ var args = {
             token: 'token',
             username: 'username',
             password: 'passy',
-            requestedFields: ["YEAR","CANCELLED"],
+            requestedFields: ["YEAR","CANCELLED","DAY", "MONTH"],
             filtersIds: ["cancelledToBoolean", "printOnScreen"],
             validationsIds: ["validDate","cancelled0or1"],
             triggerExpression: 'YEAR > 2015 and DAY > 3'

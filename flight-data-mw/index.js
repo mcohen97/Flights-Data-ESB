@@ -7,7 +7,7 @@ const DBContext = require('./repositories/db-context');
         await DBContext.initRepository();
         await Server.initServer();
     } catch(err) {
-        console.log(`Error initializing server: ${err}`);
+        console.log(`Error initializing server: ${err}, CallStack: ${err.stack}`);
         process.exit(1);
     }
 })();

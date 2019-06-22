@@ -9,6 +9,7 @@ module.exports = class AirlinesClientsService {
         this.clientsRepository = airlinesClientsDataRepository;
         this.authentication = authenticationService;
         this.newConnections = new ConnectionPublisher('new-connections');
+        this.updatedConnections= new ConnectionPublisher('updated-connections');
     }
 
     async add(data) {
@@ -33,6 +34,7 @@ module.exports = class AirlinesClientsService {
             throw new Error('Cannot update, service does not exist');
         }else{
             this.clientsRepository.update(airlineClientData);
+            this.updatedConnections.publish({username:username, updatedData:data});
         }
         return true;
     }
