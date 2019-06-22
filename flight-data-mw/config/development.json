@@ -5,5 +5,8 @@
     },
     "pipeline":{
         "pipe": "queue"
+    },
+    "logger": {
+        "type": "file"
     }
 }
