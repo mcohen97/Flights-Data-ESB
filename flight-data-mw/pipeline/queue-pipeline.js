@@ -1,4 +1,5 @@
 const AbstractPipeline = require('./abstract-pipeline');
+const toContentType = require('../services/content-type-transformation');
 const Queue = require('bull');
 
 class QueuePipeline extends AbstractPipeline {
@@ -36,9 +37,10 @@ function setUpQueue(newQueue,queues,callbacks,filter){
                 }else{
                     let clientCallback = callbacks[result.clientId];
                     delete callbacks[result.clientId]
+                    console.log('finished');
                     //the last filter
-                    //toContentType(result,(error,processedData) =>clientCallback(error,processedData))
-                    clientCallback(null, result);
+                    toContentType(result,(error,processedData) =>clientCallback(error,processedData))
+                    //clientCallback(null, result);
                 }
                 done();
             }
@@ -62,15 +64,7 @@ function setUpQueue(newQueue,queues,callbacks,filter){
      //then we transform the remaining fields.
      nextFilterId = input.pendingFilters.shift();
     }
-    /*else if(input.pendingFilters.length >0){
-     //then we transform the remaining fields.
-     nextFilterId = input.pendingFilters.shift();
-    }*/
-    /*else{
-     //then the content type.
-      nextFilterId = "toContentType";
-      input.transformedToContentType = true;
-    }*/
+    console.log(`next filter id: ${nextFilterId}`);
     let next = queues.find((q)=>q.name == nextFilterId);
     next.add(input, { removeOnComplete: true }); 
  }

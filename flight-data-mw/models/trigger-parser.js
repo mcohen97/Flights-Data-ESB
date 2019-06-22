@@ -1,5 +1,5 @@
 const Parser = require('expr-eval').Parser;
-const DataFields = require('../data-description/flight-data-fields');
+const DataFields = require('../data-description/flight-data-fields').List;
 
 const parser = new Parser();
 

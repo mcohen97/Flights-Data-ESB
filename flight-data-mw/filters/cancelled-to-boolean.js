@@ -1,4 +1,4 @@
-const DataFields = require('../data-description/flight-data-fields');
+const DataFields = require('../data-description/flight-data-fields').Dictionary;
 
 module.exports = function cancelledToBoolean(data, next){
     console.log("filtro cancelled to boolean");

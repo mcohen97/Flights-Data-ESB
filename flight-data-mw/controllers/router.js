@@ -4,8 +4,9 @@ const ClientsCredentialsRepository = require('../repositories/repository')('clie
 const AirlinesClientsService = require('../services/airlines-clients-service');
 const AuthenticationService = require('../services/authentication-service');
 const ServiceRegistry = require('./service-registry');
-const DataFilteringService = require('../services/data-filtering-service');
+const DataFilteringService = require('../services/data-transformation-service');
 const ConnectionsService = require('../services/connections-service');
+const DataProcessService = require('../services/data-process-service');
 
 const router = express.Router();
 
@@ -19,6 +20,7 @@ const filteringService = new DataFilteringService();
 const connectionsService = new ConnectionsService(airlinesServicesRepository);
 const clientsService = new AirlinesClientsService(airlinesServicesRepository, authService,connectionsService);
 const clients = new ServiceRegistry(clientsService);
+const dataProccesService = new DataProcessService(connectionsService,filteringService);
 
 let jobNumber = 1;
 

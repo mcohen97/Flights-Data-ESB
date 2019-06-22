@@ -31,4 +31,5 @@ const FlightDataFields ={
     LATE_AIRCRAFT_DELAY: 'LATE_AIRCRAFT_DELAY',
     WEATHER_DELAY: 'WEATHER_DELAY'
 }
-module.exports = Object.keys(FlightDataFields);
+module.exports.List = Object.keys(FlightDataFields);
+module.exports.Dictionary = Object.freeze(FlightDataFields);

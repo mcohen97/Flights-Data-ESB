@@ -1,5 +1,4 @@
 const AirlineClient = require('./abstract-airline-client-connection');
-const toContentType = require('../services/content-type-transformation');
 const Client = require('node-rest-client').Client;
 
 module.exports= class AirlineRestClient extends AirlineClient{
@@ -14,7 +13,7 @@ module.exports= class AirlineRestClient extends AirlineClient{
         let client = new Client();
         let endpoint = `${this.url}:${this.port}`;
         let args = {
-            data: toContentType(data, this.responseContentType),
+            data: data,
             headers: { "Content-Type": getContentTypeHeader(this.responseContentType) }
         };
         console.log(args.data);

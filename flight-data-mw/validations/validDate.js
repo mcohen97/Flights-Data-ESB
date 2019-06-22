@@ -1,4 +1,4 @@
-const DataFields = require('../data-description/flight-data-fields');
+const DataFields = require('../data-description/flight-data-fields').Dictionary;
 const Moment = require('moment'); 
 
 module.exports = function validDate(data, next){
