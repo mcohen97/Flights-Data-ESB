@@ -44,7 +44,6 @@ function getContentTypeHeader(contentType){
             value = "application/json";
             break;
         case "XML":
-            console.log("xml");
             value = "application/xml";
             break;
         default:

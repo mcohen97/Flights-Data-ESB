@@ -21,11 +21,11 @@ const queue = new Queue("data");
 const airlinesServicesRepository = new AirlinesClientsRepository();
 const clientsCredentialsRepository = new ClientsCredentialsRepository();
 const authService = new AuthenticationService(clientsCredentialsRepository,airlinesServicesRepository);
-const filteringService = new DataFilteringService();
+const filtersRepository = new FiltersRepository();
+const filteringService = new DataFilteringService(filtersRepository);
 const connectionsService = new ConnectionsService(airlinesServicesRepository);
 const clientsService = new AirlinesClientsService(airlinesServicesRepository, authService,connectionsService);
 const serviceRegistry = new ServiceRegistry(clientsService);
-const filtersRepository = new FiltersRepository();
 const informationService= new InformationService(filtersRepository);
 const serviceAssistance = new ServiceAssistance(clientsService,informationService);
 const dataProccesService = new DataProcessService(connectionsService,filteringService);
@@ -38,9 +38,9 @@ router.put('/update/:username',(req, res) => serviceAssistance.updateServiceData
 router.get('/info',(req, res) => serviceAssistance.getActionsCatalog(req,res));
 
 queue.process(2,(job,done) =>{
-    console.log("job processed - "+jobNumber);
-    console.log("   data length: "+job.data.length);
-    jobNumber++;
+    //console.log("job processed - "+jobNumber);
+    //console.log("   data length: "+job.data.length);
+    //jobNumber++;
     dataProccesService.executeTriggers(job.data);
     done();
 })
