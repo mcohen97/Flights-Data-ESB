@@ -11,6 +11,7 @@
         "start_row_index": 0,
         "data_length": 100,
         "interval": 2000,
+        "number_messages": 3,
         "url": "http://localhost:6666/publish"
     },
     "port":8081

@@ -11,6 +11,7 @@ let interval = config.get("publish_config.interval");
 let port = config.get("port");
 let publish_url = config.get("publish_config.url");
 let initial_line = config.get("publish_config.start_row_index");
+let number_messages = config.get("publish_config.number_messages");
 
 const app = new Koa();
 
@@ -21,32 +22,41 @@ app.use(router.allowedMethods());
 app.listen(port);
 
 
-sendMessages(initial_line, dataLength, interval, publish_url);
+sendMessages(initial_line, dataLength, interval, number_messages, publish_url);
 
-console.log(`Server started, see http://localhost:${port}`);
-console.log("data length: " + dataLength);
-console.log("interval: " + interval);
+console.log(`Server started on port: ${port}`);
+console.log("Data length: " + dataLength);
+console.log("Interval: " + interval);
+console.log("Number of messages: " + number_messages);
 
-async function sendMessages(offset,length, interval, url){
+async function sendMessages(offset,length, interval, count, url){
     const flightService = new FlightService();
     await flightService.load();
-    let i = offset;
-    //setInterval(async () => {
-        let messages = await flightService.getAll(length,i);
-        i += length
+    for(let messageNumber = 0; messageNumber < count; messageNumber++){
+        let messages = await flightService.getAll(length,offset);
+        offset += length
         for(message of messages)
             message.publisher_checkout_timestamp = Date.now();
-        console.log("sent"+ i);
+        console.log("\n");
+        console.log("Message number: "+(messageNumber+1));
+        console.log("Total sent: "+ offset);
         send(messages,url);
-    //}, interval);
+        await sleep(interval);
+    }
 }   
 
 function send(message, url){
     axios.post(url, message)
     .then((response) => {
-        console.log(`statusCode: ${response.statusCode}`)
+        console.log(`Response: ${response.statusCode}`)
     })
     .catch((error) => {
-        console.error(error.code)
+        console.error("Error: "+error.code)
+    })
+}
+
+function sleep(ms){
+    return new Promise(resolve=>{
+        setTimeout(resolve,ms)
     })
 }
