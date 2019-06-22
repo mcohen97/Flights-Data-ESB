@@ -1,4 +1,4 @@
-const DataFields = require('../data-description/flight-data-fields');
+const DataFields = require('../data-description/flight-data-fields').Dictionary;
 
 module.exports = function cancelled0or1(data, next){
     console.log("validacion cancelacion 0 o 1");

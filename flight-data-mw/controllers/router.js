@@ -6,7 +6,7 @@ const AuthenticationService = require('../services/authentication-service');
 const DataProcessService =  require('../services/data-process-service');
 const ServiceRegistry = require('./service-registry');
 const DataProcessor = require('./data-process');
-const DataFilteringService = require('../services/data-filtering-service');
+const DataFilteringService = require('../services/data-transformation-service');
 const ConnectionsService = require('../services/connections-service');
 
 const router = express.Router();

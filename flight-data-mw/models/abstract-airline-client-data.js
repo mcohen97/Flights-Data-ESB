@@ -1,5 +1,5 @@
 const EndpointTypes = require('../data-description/endpoint-types');
-const FlightDataFields = require('../data-description/flight-data-fields');
+const FlightDataFields = require('../data-description/flight-data-fields').List;
 const AirlinesIATACodes = require('../data-description/airlines').Codes;
 const TriggerExpressionParser = require('./trigger-parser');
 

@@ -24,24 +24,11 @@ module.exports = class DataProcessService {
 }
 
 function filterValidateAndSend(filteringService, client, data){
-    data.pendingValidations = client.validationsIds.slice();
-    data.fieldsSelected = false;
-    data.requestedFields = client.requestedFields.slice();
-    data.pendingFilters = client.filtersIds.slice();
-    data.transformedToContentType = false;
-    data.contentType = client.responseContentType;
-    data.clientId = client.username;
-    let processedData =filteringService.processData(data);
+
+    let processedData =filteringService.applyTransformations(data,client);
     processedData.then((result) => {
                 console.log("procesado, resultado: ");
                 result.MW_CHECKOUT_TIMESTAMP = Date.now();
-                //delete pipeline routing metadata.
-                delete result.pendingFilters;
-                delete result.pendingValidations;
-                delete result.fieldsSelected;
-                delete result.requestedFields;
-                delete result.clientId;
-
                 client.send(result);})
                  .catch((err) => client.send({error: `${err.toString()} stacktrace: ${err.stack}`}));
 }

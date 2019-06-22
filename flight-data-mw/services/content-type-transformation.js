@@ -3,9 +3,9 @@ const js2xmlparser = require("js2xmlparser");
 
 
 //module.exports = () => { return async (data, next) => {
-  module.exports = function toContentType(data, contentType){
+  module.exports = function toContentType(data, next){
     let result;
-    switch (contentType) {
+    switch (data.contentType.toUpperCase()) {
         case 'JSON': 
              result = renderJSON(data);
             break;
@@ -16,8 +16,8 @@ const js2xmlparser = require("js2xmlparser");
             result= data;
             break;
     }
-    //next(null,data);
-    return result;
+    next(null,data);
+    //return result;
 }
 //}};
 
