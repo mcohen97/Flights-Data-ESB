@@ -1,4 +1,4 @@
-const Logger = require('./logger/logger')('log4js');
+const Logger = require('logger')('log4js');
 const logger = new Logger();
 
 module.exports.initServer = async function () {

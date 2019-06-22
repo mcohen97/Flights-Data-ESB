@@ -1,7 +1,4 @@
-var config = require('config');
-
-function deferBinding(loggerName) {
-    let type = config.get('logger.type') || 'file';
+function deferBinding(loggerName, type = 'file') {
     let implementation = require(`./${loggerName}-${type}-logger`);
     return implementation;
 }
