@@ -9,6 +9,7 @@ module.exports = class DataProcessService {
     }
 
     async executeTriggers(dataReceived) {
+        console.log(dataReceived.length);
         for (let data of dataReceived) {
             data = formatMessage(data);
             let connections = await this.clients.getByIata(data.AIRLINE);

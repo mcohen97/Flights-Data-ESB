@@ -16,7 +16,6 @@ module.exports= class AirlineRestClient extends AirlineClient{
             data: data,
             headers: { "Content-Type": getContentTypeHeader(this.responseContentType) }
         };
-        console.log(args.data);
         let req = client.post(endpoint, args, function (received, response) {
         });
 
@@ -44,7 +43,6 @@ function getContentTypeHeader(contentType){
             value = "application/json";
             break;
         case "XML":
-            console.log("xml");
             value = "application/xml";
             break;
         default:

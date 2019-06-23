@@ -22,27 +22,29 @@ app.use(router.allowedMethods());
 app.listen(port);
 
 
-sendMessages(initial_line, dataLength, interval, number_messages, publish_url);
+sendMessages(initial_line, 50, interval, number_messages, publish_url);
 
 console.log(`Server started on port: ${port}`);
-console.log("Data length: " + dataLength);
+//console.log("Data length: " + dataLength);
+console.log("Data length: " + 10);
 console.log("Interval: " + interval);
-console.log("Number of messages: " + number_messages);
+//console.log("Number of messages: " + number_messages);
+console.log("Number of messages: " + 10);
 
 async function sendMessages(offset,length, interval, count, url){
     const flightService = new FlightService();
     await flightService.load();
-    for(let messageNumber = 0; messageNumber < count; messageNumber++){
+    //for(let messageNumber = 0; messageNumber < count; messageNumber++){
         let messages = await flightService.getAll(length,offset);
         offset += length
         for(message of messages)
             message.publisher_checkout_timestamp = Date.now();
         console.log("\n");
-        console.log("Message number: "+(messageNumber+1));
+        //console.log("Message number: "+(messageNumber+1));
         console.log("Total sent: "+ offset);
         send(messages,url);
         await sleep(interval);
-    }
+    //}
 }   
 
 function send(message, url){

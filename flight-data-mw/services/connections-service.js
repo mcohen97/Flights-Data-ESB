@@ -6,10 +6,13 @@ module.exports = class ConnectionsService {
 
     constructor(airlinesClientsDataRepository){
         this.clientsRepository= airlinesClientsDataRepository;
+        this.connections = [];
         this.connectionsIataHash = {};
         AirlinesIATACodes.forEach(a => this.connectionsIataHash[a] = []);
         this.newConnections = new ConnectionSubscriber('new-connections');
+        this.updatedConnections = new ConnectionSubscriber('updated-connections');
         this.newConnections.subscribe((connectionData) => this.addConnection(connectionData));
+        this.updatedConnections.subscribe((connectionData)=> this.updateConnections(connectionData.username, connectionData.updatedData));
     }
 
     async getAll() {
@@ -22,7 +25,18 @@ module.exports = class ConnectionsService {
 
     async addConnection(airlineServiceData){
         let newConnection = ClientConnectionFactory.createConnection(airlineServiceData);
+        this.connections.push(newConnection);
         this.connectionsIataHash[airlineServiceData.airline].push(newConnection);
+    }
+
+    async updateConnections(username, updatedData){
+        for(let i=0; i < this.connections.length; i++){
+            let service = this.connections[i];
+            if(service.username == username){
+                updateFields(service,updatedData);
+                break;
+            }
+        }
     }
 
     async loadPreviousRegisteredClients(){
@@ -30,7 +44,14 @@ module.exports = class ConnectionsService {
         console.log('clientes guardados: '+clients.length);
         clients.forEach((c) => {
             let conn =ClientConnectionFactory.createConnection(c);
+            this.connections.push(conn);
             this.connectionsIataHash[c.airline].push(conn);
-        });  
+        });
+    }
+}
+
+function updateFields(service, updatedData){
+    for(let field in updatedData){
+        service[field] = updatedData[field];
     }
 }
