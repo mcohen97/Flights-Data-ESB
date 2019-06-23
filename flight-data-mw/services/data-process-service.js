@@ -12,6 +12,7 @@ module.exports = class DataProcessService {
 
     async executeTriggers(dataReceived) {
         console.log(dataReceived.length);
+        let triggerCount = [];
         for (let data of dataReceived) {
             data = formatMessage(data);
             let connections = await this.clients.getByIata(data.AIRLINE);
@@ -19,10 +20,14 @@ module.exports = class DataProcessService {
             for(let connection of connections){
                 let trigger = connection.getTrigger();
                 if(trigger(data)){
+                    if(!triggerCount[data["AIRLINE"]])
+                        triggerCount[data["AIRLINE"]] = 0;
+                    triggerCount[data["AIRLINE"]]++;
                     filterValidateAndSend(this.filteringService, connection, data);
                 }
             }
         }
+        //logger.logInfo("AA times triggered: " + triggerCount["AA"]);
     }
 }
 
@@ -31,7 +36,8 @@ async function filterValidateAndSend(filteringService, client, data){
     let processedData =filteringService.applyTransformations(data,client);
     processedData.then((result) => {
                 //console.log("procesado, resultado: ");
-                logger.logInfo(data["FLIGHT_NUMBER"] + " transformed into " + result);
+                if(data["AIRLINE"] == "AA")
+                    logger.logInfo("AA DATA PROCESSED")
                 result.MW_CHECKOUT_TIMESTAMP = Date.now();
                 client.send(result);})
                  .catch((err) => client.send({error: `${err.toString()} stacktrace: ${err.stack}`}));
