@@ -1,4 +1,5 @@
 const express = require('express');
+const Config = require('config');
 
 const AirlinesClientsRepository = require('repositories').AirlineServices;
 const ClientsCredentialsRepository = require('repositories').Credentials;
@@ -17,7 +18,9 @@ const router = express.Router();
 const airlinesServicesRepository = new AirlinesClientsRepository();
 const clientsCredentialsRepository = new ClientsCredentialsRepository();
 const authService = new AuthenticationService(clientsCredentialsRepository,airlinesServicesRepository);
-const filtersRepository = new FiltersRepository();
+let transformationsDirectory = __dirname + Config.get("filters.transformationsDir");
+let validationsDirectory = __dirname + Config.get("filters.validationsDir");
+const filtersRepository = new FiltersRepository(transformationsDirectory,validationsDirectory);
 const clientsService = new AirlinesClientsService(airlinesServicesRepository, authService);
 const serviceRegistry = new ServiceRegistry(clientsService);
 const informationService= new InformationService(filtersRepository);

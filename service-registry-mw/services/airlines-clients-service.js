@@ -1,5 +1,5 @@
 const AirlineClientDataFactory = require('domain-entities').ServiceFactory;
-const Jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const ConnectionPublisher = require('./connection-publisher');
 const Config = require('config');
 
@@ -22,7 +22,7 @@ module.exports = class AirlinesClientsService {
         this.newConnections.publish(airlineClientData);
 
         this.authentication.deleteUsedCredential(airlineClientData.username);
-        let token =Jwt.sign({ clientId: airlineClientData.username}, Config.get('credentials.secret'));
+        let token =jwt.sign({ clientId: airlineClientData.username}, Config.get('credentials.secret'));
         return token;
     }
 
