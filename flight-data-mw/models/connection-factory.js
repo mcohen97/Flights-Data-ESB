@@ -1,6 +1,6 @@
 const AirlineRestClientConnection = require('./airline-rest-client-connection');
-const EndpointTypes = require('../data-description/endpoint-types');
-const TriggerParser = require('./trigger-parser');
+const EndpointTypes = require('domain-entities').EndpointTypes;
+const TriggerParser = require('domain-entities').TriggerParser;
 
 module.exports = class ConnectionFactory{
 

@@ -1,4 +1,4 @@
-const DataFieldsTypes = require('../data-description/flight-data-fields-types');
+const DataFieldsTypes = require('domain-entities').DataFieldsTypes;
 
 
 module.exports = class DataProcessService {

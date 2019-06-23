@@ -2,11 +2,17 @@ const glob = require('glob');
 const chokidar = require('chokidar');
 
 module.exports = class FiltersRepository{
-    constructor(){
-        this.filters=loadFilters();
-        this.validations=loadValidations();
-        this.filtersWatcher = chokidar.watch(__dirname+ '/../filters/',{ignoreInitial: true});
-        this.validationsWatcher = chokidar.watch(__dirname+ '/../validations/',{ignoreInitial: true});
+    constructor(transformationsDir, validationsDir){
+        if(!transformationsDir.endsWith('/')){
+            transformationsDir+='/';
+        }
+        if(!validationsDir.endsWith('/')){
+            validationsDir+='/';
+        }
+        this.filters=loadTransformations(transformationsDir);
+        this.validations=loadValidations(validationsDir);
+        this.filtersWatcher = chokidar.watch(transformationsDir,{ignoreInitial: true});
+        this.validationsWatcher = chokidar.watch(validationsDir,{ignoreInitial: true});
     }
 
     getAllTransformations(){
@@ -30,10 +36,10 @@ module.exports = class FiltersRepository{
     }
 }
 
-function loadFilters(){
+function loadTransformations(transformationsDir){
     let filters = [];
     let filter;
-    glob.sync( __dirname+ '/../filters/*.js' ).forEach( function( file ) {
+    glob.sync( `${transformationsDir}*.js` ).forEach( function( file ) {
         filter = require(file);
         if(typeof filter == "function"){
             filters.push(filter);
@@ -44,10 +50,10 @@ function loadFilters(){
     return filters;
 }
 
-function loadValidations(){
+function loadValidations(validationsDir){
     let validations=[];
     let validation;
-    glob.sync( __dirname+ '/../validations/*.js' ).forEach( function( file ) {
+    glob.sync( `${validationsDir}*.js` ).forEach( function( file ) {
         validation = require(file);
         if(typeof validation == "function"){
             validations.push(validation);

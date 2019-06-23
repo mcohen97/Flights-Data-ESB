@@ -1,41 +1,35 @@
-const Logger = require('logger')('file');
+const Config = require('config');
+const Logger = require('logger')(Config.get('logger.type'));
 const logger = new Logger();
 
 
 module.exports.initServer = async function () {
-    const express = require('express');
-    const bodyParser = require('body-parser');
-    const jwt = require('express-jwt');
-    const Config = require('config');
 
-    const app = express();
-    const port = 6666;
+    const AirlinesClientsRepository = require('repositories').AirlineServices;
+    const FiltersRepository = require('repositories').Filters;
 
-    const routes= require('./controllers/router').router;
+    const DataFilteringService = require('./services/data-transformation-service');
+    const ConnectionsService = require('./services/connections-service');
+    const DataProcessService = require('./services/data-process-service');
 
-    const mwsecret  = Config.get('credentials.secret') ;
+    const Queue = require('bull');
+    const publishedFlightsQueue = new Queue("data");
 
-    app.use(jwt({credentialsRequired: true, secret: mwsecret}).unless({path: [/^\/register|info/]}));
-    app.use(function(err, req, res, next) {
-        if(err.name === 'UnauthorizedError') {
-          res.status(err.status).send({message:err.message});
-          return;
-        }
-     next();
-    });
+    const airlinesServicesRepository = new AirlinesClientsRepository();
+    let transformationsDirectory = __dirname + Config.get("filters.transformationsDir");
+    let validationsDirectory = __dirname + Config.get("filters.validationsDir");
+    const filtersRepository = new FiltersRepository(transformationsDirectory,validationsDirectory);
+    const filteringService = new DataFilteringService(filtersRepository);
+    const connectionsService = new ConnectionsService(airlinesServicesRepository);
+    const dataProccesService = new DataProcessService(connectionsService,filteringService);
 
-    app.use(bodyParser.json({limit:'999mb', pretty: true }));
-    app.use(routes);
+    connectionsService.loadPreviousRegisteredClients();
 
-    let server = app.listen(port, function () {
-
-        let host = server.address().address
-        let port = server.address().port
-
-        logger.logInfo("app listening");
-        console.log('App listening at http://%s:%s', host, port)
-    });
-
-    const service = require('./controllers/router').service;
-    service.loadPreviousRegisteredClients();
+    publishedFlightsQueue.process(2,(job,done) =>{
+        //console.log("job processed - "+jobNumber);
+        //console.log("   data length: "+job.data.length);
+        //jobNumber++;
+        dataProccesService.executeTriggers(job.data);
+        done();
+    })
 }

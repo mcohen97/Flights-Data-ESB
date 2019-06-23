@@ -1,4 +1,4 @@
-const DataFields = require('../data-description/flight-data-fields').List;
+const DataFields = require('domain-entities').DataFieldsList;
 
 module.exports = class InformationService{
 

@@ -1,5 +1,5 @@
 const ClientConnectionFactory = require('../models/connection-factory');
-const AirlinesIATACodes = require('../data-description/airlines').Codes;
+const AirlinesIATACodes = require('domain-entities').Airlines.Codes;
 const ConnectionSubscriber = require('./connection-subscriber');
 
 module.exports = class ConnectionsService {

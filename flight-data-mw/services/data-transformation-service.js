@@ -1,5 +1,5 @@
 const Pipeline = require('../pipeline/pipeline');
-const DataFields = require('../data-description/flight-data-fields').List;
+const DataFields = require('domain-entities').FlightDataFieldsList;
 const uuid = require('uuid/v1');
 
 module.exports = class DataTransformationsService{

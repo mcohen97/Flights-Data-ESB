@@ -1,4 +1,4 @@
-const AirlineClientDataFactory = require('../models/airline-client-data-factory');
+const AirlineClientDataFactory = require('domain-entities').ServiceFactory;
 const Jwt = require('jsonwebtoken');
 const ConnectionPublisher = require('./connection-publisher');
 const Config = require('config');

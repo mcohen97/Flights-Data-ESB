@@ -1,4 +1,4 @@
-const DataFields = require('../data-description/flight-data-fields').Dictionary;
+const DataFields = require('domain-entities').FlightDataFieldsDictionary;
 
 module.exports = function giveDelayReason(data, next){
     let allDelayFields = [DataFields.AIR_SYSTEM_DELAY,DataFields.SECURITY_DELAY,

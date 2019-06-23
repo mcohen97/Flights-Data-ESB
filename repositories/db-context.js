@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const AirlineClientSchema= require('./airline-client-schema');
 const Credentials = require('./credentials-schema');
 const AirlineRestClientSchema = require('./airline-rest-client-schema')
-const AirlineClientFactory = require('../models/airline-client-data-factory');
-const EndpointTypes = require('../data-description/endpoint-types');
+const AirlineClientFactory = require('domain-entities').ServiceFactory;
+const EndpointTypes = require('domain-entities').EndpointTypes;
 const Schema = mongoose.Schema;
 
 module.exports = class DBContext {

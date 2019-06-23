@@ -11,6 +11,10 @@
     },
     "logger": {
         "type": "file"
+    },
+    "filters":{
+        "transformationsDir":"/filters/",
+        "validationsDir": "/validations/"
     }
 
 }

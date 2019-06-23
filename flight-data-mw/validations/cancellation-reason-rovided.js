@@ -1,4 +1,4 @@
-const DataFields = require('../data-description/flight-data-fields').Dictionary;
+const DataFields = require('domain-entities').FlightDataFieldsDictionary;
 
 module.exports = function cancellationReasonProvided(data, next){
     if(!(DataFields.CANCELLED in data)){
