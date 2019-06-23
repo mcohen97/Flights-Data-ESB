@@ -1,4 +1,4 @@
-const Logger = require('logger')('log4js');
+const Logger = require('logger')('file');
 const logger = new Logger();
 
 

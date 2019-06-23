@@ -1,5 +1,9 @@
-function deferBinding(loggerName, type = 'file') {
-    let implementation = require(`./${loggerName}-${type}-logger`);
+let config = {
+    "implementation":"log4js"
+}
+
+function deferBinding(type = 'file') {
+    let implementation = require(`./${config.implementation}-${type}-logger`);
     return implementation;
 }
 
