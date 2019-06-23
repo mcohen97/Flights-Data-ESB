@@ -12,8 +12,6 @@ module.exports = class FlightMemoryRepository extends FlightRepository{
     }
 
     async getAll(limit, offset){
-        if(limit>1000000)
-            limit = 1000000;
         this.flights = [];
         this.flightsDict = [];
         await load(this.flights,this.flightsDict,limit,offset);

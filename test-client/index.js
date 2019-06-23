@@ -9,13 +9,17 @@ let port = 3004;
 app.use(bodyParser.json());
 app.use(xmlparser());
 
+let publication_number = 1;
 
 app.post('/', function (req, res) {
     console.log("\n");
-    console.log("----- PUBLICACION -----");
+    console.log("----- PUBLICACION "+publication_number+" -----");
+    publication_number++;
     console.log(req.body);
     let mwTimeDifference = req.body["MW_CHECKOUT_TIMESTAMP"] - req.body["MW_CHECKIN_TIMESTAMP"];
+    let totalTime = Date.now() - req.body["PUBLISHER_CHECKOUT_TIMESTAMP"];
     console.log("----- TIME IN MW: "+mwTimeDifference+" -----");
+    console.log("----- TOTAL TIME: "+totalTime+" -----");
     
     res.status(200);
     res.json({

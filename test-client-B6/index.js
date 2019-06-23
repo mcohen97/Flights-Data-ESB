@@ -13,7 +13,10 @@ app.post('/', function (req, res) {
     console.log("----- PUBLICACION -----");
     console.log(req.body);
     let mwTimeDifference = req.body["MW_CHECKOUT_TIMESTAMP"] - req.body["MW_CHECKIN_TIMESTAMP"];
+    let totalTime = Date.now() - req.body["PUBLISHER_CHECKOUT_TIMESTAMP"];
     console.log("----- TIME IN MW: "+mwTimeDifference+" -----");
+    console.log("----- TOTAL TIME: "+totalTime+" -----");
+
     
     res.status(200);
     res.json({
