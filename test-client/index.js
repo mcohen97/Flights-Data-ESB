@@ -8,17 +8,29 @@ let port = 3004;
 app.use(bodyParser.json());
 app.use(xmlparser());
 
-let publication_number = 1;
+let publication_number = 0;
+let mwTimeAccum = 0;
+let totalTimeAccum = 0;
+let mwAverage = 0;
+let totalAverage = 0;
 
 app.post('/', function (req, res) {
+    publication_number++;
     console.log("\n");
     console.log("----- PUBLICACION "+publication_number+" -----");
-    publication_number++;
     console.log(req.body);
     let mwTimeDifference = req.body["MW_CHECKOUT_TIMESTAMP"] - req.body["MW_CHECKIN_TIMESTAMP"];
     let totalTime = Date.now() - req.body["PUBLISHER_CHECKOUT_TIMESTAMP"];
-    console.log("----- TIME IN MW: "+mwTimeDifference+" -----");
-    console.log("----- TOTAL TIME: "+totalTime+" -----");
+    mwTimeAccum += mwTimeDifference;
+    totalTimeAccum += totalTime;
+    mwAverage = mwTimeAccum/publication_number;
+    totalAverage = totalTimeAccum/publication_number;
+
+    console.log("----- TIME IN MW: "+mwTimeDifference+" | AVERAGE: "+mwAverage);
+    console.log("----- TOTAL TIME: "+totalTime+" | AVERAGE: "+totalAverage);
+
+
+
     
     res.status(200);
     res.json({

@@ -1,4 +1,6 @@
 const DataFieldsTypes = require('../data-description/flight-data-fields-types');
+const Logger = require('logger')('file');
+const logger = new Logger();
 
 
 module.exports = class DataProcessService {
@@ -28,7 +30,8 @@ async function filterValidateAndSend(filteringService, client, data){
 
     let processedData =filteringService.applyTransformations(data,client);
     processedData.then((result) => {
-                console.log("procesado, resultado: ");
+                //console.log("procesado, resultado: ");
+                logger.logInfo(data["FLIGHT_NUMBER"] + " transformed into " + result);
                 result.MW_CHECKOUT_TIMESTAMP = Date.now();
                 client.send(result);})
                  .catch((err) => client.send({error: `${err.toString()} stacktrace: ${err.stack}`}));

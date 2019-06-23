@@ -37,7 +37,7 @@ router.post('/register', (req, res) => serviceRegistry.register(req,res));
 router.put('/update/:username',(req, res) => serviceAssistance.updateServiceData(req,res));
 router.get('/info',(req, res) => serviceAssistance.getActionsCatalog(req,res));
 
-queue.process(2,(job,done) =>{
+queue.process((job,done) =>{
     //console.log("job processed - "+jobNumber);
     //console.log("   data length: "+job.data.length);
     //jobNumber++;
