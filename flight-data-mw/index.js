@@ -1,6 +1,8 @@
+//require('newrelic');
 global.Promise = require('bluebird');
 const Server = require('./server');
 const DBContext = require('./repositories/db-context');
+
 
 (async () => {
     try {

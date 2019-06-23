@@ -1,6 +1,7 @@
 const Logger = require('logger')('log4js');
 const logger = new Logger();
 
+
 module.exports.initServer = async function () {
     const express = require('express');
     const bodyParser = require('body-parser');
