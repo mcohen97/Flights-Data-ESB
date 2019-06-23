@@ -66,6 +66,10 @@ function setUpQueue(newQueue,queues,callbacks,filter){
     }
     //console.log(`next filter id: ${nextFilterId}`);
     let next = queues.find((q)=>q.name == nextFilterId);
-    next.add(input, { removeOnComplete: true }); 
+    if(next){
+        next.add(input, { removeOnComplete: true }); 
+    }else{
+        console.log("no existe "+ nextFilterId);
+    }
  }
 

@@ -52,22 +52,6 @@ function setUpPipeline(pipeline, filtersRepository){
     filtersRepository.getAllTransformations().forEach( t => pipeline.use(t));
     pipeline.use(selectFields);
     filtersRepository.getAllValidations().forEach(v => pipeline.use(v));
-    //the same pipeline can be reused for validations, field selection and transformations.
-    /*let filter;
-    glob.sync( __dirname+ '/../filters/*.js' ).forEach( function( file ) {
-        filter = require(file);
-        if(typeof filter == "function"){
-            pipeline.use(filter);
-        }
-    });
-    pipeline.use(selectFields);
-    let validation;
-    glob.sync( __dirname+ '/../validations/*.js' ).forEach( function( file ) {
-        validation = require(file);
-        if(typeof validation == "function"){
-            pipeline.use(validation);
-        }
-    });*/
 }
 //field selection filter, not dynamically provided.
 function selectFields(data, next){

@@ -16,7 +16,6 @@ module.exports= class AirlineRestClient extends AirlineClient{
             data: data,
             headers: { "Content-Type": getContentTypeHeader(this.responseContentType) }
         };
-        console.log(args.data);
         let req = client.post(endpoint, args, function (received, response) {
         });
 

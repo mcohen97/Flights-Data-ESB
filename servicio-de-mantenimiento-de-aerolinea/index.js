@@ -10,7 +10,7 @@ app.use(xmlparser());
 
 
 app.post('/', function (req, res) {
-    req.body.PUBLICATION.CLIENT_CHECKIN_TIMESTAMP = Date.now();
+    //req.body.PUBLICATION.CLIENT_CHECKIN_TIMESTAMP = Date.now();
     console.log(req.body);
 
     res.status(200);
@@ -41,11 +41,11 @@ var args = {
             token: 'token',
             username: 'username',
             password: 'password',
-            requestedFields: ["TIMESTAMP","DATE","AIRLINE", "FLIGHT_NUMBER","ORIGIN_AIRPORT","DESTINATION_AIRPORT",
-            "SCHEDULED_DEPARTURE","CANCELLED","CANCELATION_REASON"],
-            filtersIds: ["cancelledToBoolean", "printOnScreen"],
+            requestedFields: ["AIRLINE", "FLIGHT_NUMBER","ORIGIN_AIRPORT","DESTINATION_AIRPORT",
+            "SCHEDULED_DEPARTURE","CANCELLED","CANCELLATION_REASON"],
+            filtersIds: ["cancelledToBoolean", "printOnScreen","cancellationReasonToText"],
             validationsIds: ["validDate","cancelled0or1","cancellationReasonProvided"],
-            triggerExpression: 'CANCELLED = 1'
+            triggerExpression: 'CANCELLED == 1'
 
         },
             
