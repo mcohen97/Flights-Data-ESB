@@ -10,12 +10,12 @@ module.exports = class DataTransformationsService{
         setUpPipeline(this.pipeline, this.filters);
     }
     
-    async applyTransformations(data, connection){
+    async applyTransformations(job){
         //Add extra metadata to message, for transformations.
-        addRoutingInfo(data,connection);
-
-        let promise = new Promise(function(resolve,reject){
-
+        addRoutingInfo(job);
+        this.pipeline.run(job);
+        /*let promise = new Promise(function(resolve,reject){
+            
           this.pipeline.run(data, (err,result) =>{
                 if(err){
                     reject(err);
@@ -25,27 +25,27 @@ module.exports = class DataTransformationsService{
                     resolve(result);
                 }
             });}.bind(this));
-        return promise;       
+        return promise; */      
     }
 }
 
-function addRoutingInfo(data,connection){
-    data.pendingValidations = connection.validationsIds.slice();
-    data.fieldsSelected = false;
-    data.requestedFields = connection.requestedFields.slice();
-    data.pendingFilters = connection.filtersIds.slice();
-    data.contentType = connection.responseContentType;
+function addRoutingInfo(job){
+    job.pendingValidations = job.client.validationsIds.slice();
+    job.fieldsSelected = false;
+    job.requestedFields = job.client.requestedFields.slice();
+    job.pendingFilters = job.client.filtersIds.slice();
+    job.contentType = job.client.responseContentType;
     //identify the callback
-    data.callbackId = uuid();
+    //job.callbackId = uuid();
 }
 
-function removeRoutingInfo(data){
-    delete data.pendingFilters;
-    delete data.pendingValidations;
-    delete data.fieldsSelected;
-    delete data.requestedFields;
-    delete data.callbackId;
-    delete data.contentType;
+function removeRoutingInfo(job){
+    delete job.pendingFilters;
+    delete job.pendingValidations;
+    delete job.fieldsSelected;
+    delete job.requestedFields;
+    //delete job.callbackId;
+    delete job.contentType;
 }
 
 function setUpPipeline(pipeline, filtersRepository){
@@ -54,14 +54,14 @@ function setUpPipeline(pipeline, filtersRepository){
     filtersRepository.getAllValidations().forEach(v => pipeline.use(v));
 }
 //field selection filter, not dynamically provided.
-function selectFields(data, next){
-    let selectedFields = data.requestedFields;
-    for(let key in data){
+function selectFields(job, next){
+    let selectedFields = job.requestedFields;
+    for(let key in job.message){
         //it is important to check if it is a record field, to avoid erasing the message routing metadata.
         if((DataFields.includes(key)) && (!selectedFields.includes(key))){
-            delete data[key];
+            delete job.message[key];
         }
     }
     console.log("datos seleccionados");
-    next(null,data);
+    next(null,job);
 }

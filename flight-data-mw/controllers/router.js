@@ -11,12 +11,15 @@ const ConnectionsService = require('../services/connections-service');
 const DataProcessService = require('../services/data-process-service');
 const FiltersRepository = require('../repositories/filters-repository');
 const InformationService = require('../services/info-service');
+const ClientConnectionFactory = require('../models/connection-factory');
+
 
 
 const router = express.Router();
 
 const Queue = require('bull');
-const queue = new Queue("data");
+const incomingDataQueue = new Queue("data");
+const readyToSendQueue = new Queue("readyToSend");
 
 const airlinesServicesRepository = new AirlinesClientsRepository();
 const clientsCredentialsRepository = new ClientsCredentialsRepository();
@@ -37,13 +40,27 @@ router.post('/register', (req, res) => serviceRegistry.register(req,res));
 router.put('/update/:username',(req, res) => serviceAssistance.updateServiceData(req,res));
 router.get('/info',(req, res) => serviceAssistance.getActionsCatalog(req,res));
 
-queue.process((job,done) =>{
+incomingDataQueue.process((job,done) =>{
     //console.log("job processed - "+jobNumber);
     //console.log("   data length: "+job.data.length);
     //jobNumber++;
     dataProccesService.executeTriggers(job.data);
     done();
-})
+});
+readyToSendQueue.process((bullJob,done) =>{
+    //console.log("procesado, resultado: ");
+    let job = bullJob.data;
+    dataProccesService.send(job);
+    /*
+    let result = job.message;
+    let client = job.client;
+    let connection = ClientConnectionFactory.createConnection(client);
+    result.MW_CHECKOUT_TIMESTAMP = Date.now();
+    connection.send(result)
+    .catch((err) => connection.send({error: `${err.toString()} stacktrace: ${err.stack}`}));
+    */
+    done();
+});
 
 module.exports = {router, service: connectionsService};
 

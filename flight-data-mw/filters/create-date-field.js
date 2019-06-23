@@ -1,6 +1,7 @@
 const DataFields = require('../data-description/flight-data-fields').Dictionary;
 
-module.exports = function createDateField(data, next){
+module.exports = function createDateField(job, next){
+    let data = job.message;
     if(!(DataFields.YEAR in data)){
         next(new Error(`The field ${DataFields.YEAR} is not in the record, can't create DATE field`));
     }else if(!(DataFields.MONTH in data)){
@@ -17,6 +18,7 @@ module.exports = function createDateField(data, next){
             day= "0"+day;
         }
         data.DATE = `${day}/${month}/${data.YEAR}`;
-        next(null,data);
+        job.message = data;
+        next(null,job);
     }
 }

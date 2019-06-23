@@ -7,6 +7,7 @@ module.exports = class ConnectionsService {
     constructor(airlinesClientsDataRepository){
         this.clientsRepository= airlinesClientsDataRepository;
         this.connections = [];
+        this.connectionsUsernameHash = [];
         this.connectionsIataHash = {};
         AirlinesIATACodes.forEach(a => this.connectionsIataHash[a] = []);
         this.newConnections = new ConnectionSubscriber('new-connections');
@@ -23,10 +24,15 @@ module.exports = class ConnectionsService {
         return this.connectionsIataHash[iata];
     }
 
+    async getByUsername(username){
+        return this.connectionsUsernameHash[username];
+    }
+
     async addConnection(airlineServiceData){
         let newConnection = ClientConnectionFactory.createConnection(airlineServiceData);
         this.connections.push(newConnection);
         this.connectionsIataHash[airlineServiceData.airline].push(newConnection);
+        this.connectionsUsernameHash[newConnection.username] = newConnection;
     }
 
     async updateConnections(username, updatedData){
@@ -46,6 +52,7 @@ module.exports = class ConnectionsService {
             let conn =ClientConnectionFactory.createConnection(c);
             this.connections.push(conn);
             this.connectionsIataHash[c.airline].push(conn);
+            this.connectionsUsernameHash[c.username] = conn;
         });
     }
 }

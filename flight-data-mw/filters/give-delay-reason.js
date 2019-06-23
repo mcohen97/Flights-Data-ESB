@@ -1,6 +1,7 @@
 const DataFields = require('../data-description/flight-data-fields').Dictionary;
 
-module.exports = function giveDelayReason(data, next){
+module.exports = function giveDelayReason(job, next){
+    let data = job.message;
     let allDelayFields = [DataFields.AIR_SYSTEM_DELAY,DataFields.SECURITY_DELAY,
         DataFields.AIRLINE_DELAY,DataFields.LATE_AIRCRAFT_DELAY,
         DataFields.WEATHER_DELAY];
@@ -18,7 +19,8 @@ module.exports = function giveDelayReason(data, next){
                 reason += data[field];
             }});
         data.DELAY_REASON = reason;
-        next(null,data);
+        job.message = data
+        next(null,job);
     }
 }
 

@@ -23,17 +23,26 @@ module.exports = class DataProcessService {
                     if(!triggerCount[data["AIRLINE"]])
                         triggerCount[data["AIRLINE"]] = 0;
                     triggerCount[data["AIRLINE"]]++;
-                    filterValidateAndSend(this.filteringService, connection, data);
+                    filterAndValidate(this.filteringService, connection, data);
                 }
             }
         }
         //logger.logInfo("AA times triggered: " + triggerCount["AA"]);
     }
+
+    async send(job){
+        let connection = await this.clients.getByUsername(job.client.username);
+        job.message.MW_CHECKOUT_TIMESTAMP = Date.now();
+        connection.send(job.message);
+    }
 }
 
-async function filterValidateAndSend(filteringService, client, data){
-
-    let processedData =filteringService.applyTransformations(data,client);
+async function filterAndValidate(filteringService, client, data){
+    let job = {
+        message: data,
+        client: client,
+    };
+    /*let processedData =filteringService.applyTransformations(job);
     processedData.then((result) => {
                 //console.log("procesado, resultado: ");
                 if(data["AIRLINE"] == "AA")
@@ -41,6 +50,8 @@ async function filterValidateAndSend(filteringService, client, data){
                 result.MW_CHECKOUT_TIMESTAMP = Date.now();
                 client.send(result);})
                  .catch((err) => client.send({error: `${err.toString()} stacktrace: ${err.stack}`}));
+    */
+   filteringService.applyTransformations(job);
 }
 
 function formatMessage(object) {

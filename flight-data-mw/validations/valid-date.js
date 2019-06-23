@@ -1,7 +1,8 @@
 const DataFields = require('../data-description/flight-data-fields').Dictionary;
 const Moment = require('moment'); 
 
-module.exports = function validDate(data, next){
+module.exports = function validDate(job, next){
+    let data = job.message;
     if(!(DataFields.YEAR in data)){
         next(new Error(`The field ${DataFields.YEAR} is not in the record, date is invalid`));
     }else if(!(DataFields.MONTH in data)){
@@ -18,7 +19,8 @@ module.exports = function validDate(data, next){
             day= "0"+day;
         }
         if(Moment(`${data.YEAR}-${month}-${day}`, 'YYYY-MM-DD',true).isValid()){
-            next(null,data);
+            job.message = data;
+            next(null,job);
         }else{
             next(new Error('Invalid date'));
         }

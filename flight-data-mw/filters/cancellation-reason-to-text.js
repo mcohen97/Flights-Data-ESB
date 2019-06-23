@@ -1,6 +1,7 @@
 const DataFields = require('../data-description/flight-data-fields').Dictionary;
 
-module.exports = function cancellationReasonToText(data, next){
+module.exports = function cancellationReasonToText(job, next){
+    let data = job.message;
     if(!(DataFields.CANCELLATION_REASON in data)){
         next(new Error(`The field ${fieldDataFields.CANCELLATION_REASON} is not in the record, so it can't be converted to text`));
     }else{
@@ -9,7 +10,8 @@ module.exports = function cancellationReasonToText(data, next){
         if(text){
             data.CANCELLATION_REASON = text;
             console.log(data.CANCELLATION_REASON);
-            next(null,data);
+            job.message = data;
+            next(null,job);
         }else{
             next(new Error(`The field ${fieldDataFields.CANCELLATION_REASON} has invalid format, so it can't be converted to text`)); 
         }
