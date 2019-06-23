@@ -22,7 +22,7 @@ app.use(router.allowedMethods());
 app.listen(port);
 
 
-sendMessages(initial_line, 50, interval, number_messages, publish_url);
+sendMessages(initial_line, 10, interval, number_messages, publish_url);
 
 console.log(`Server started on port: ${port}`);
 //console.log("Data length: " + dataLength);

@@ -62,11 +62,11 @@ module.exports = class AirlineClientData{
         if(!requestedFields){
             throw new Error('The requested fields must be specified')
         }
-        requestedFields.forEach(field => {
+        /*requestedFields.forEach(field => {
             if(!FlightDataFields.includes(field.toUpperCase())){
                 throw new Error(`Flight data field '${field}' does not exist`);
             }
-        });
+        });*/
         this.requestedFields = requestedFields;
     }
 }

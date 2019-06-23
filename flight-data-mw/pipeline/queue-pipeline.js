@@ -56,14 +56,23 @@ function setUpQueue(newQueue,queues,callbacks,filter){
     if(input.pendingValidations.length >0){
      //validations first.
      nextFilterId = input.pendingValidations.shift();
-    }else if (!input.fieldsSelected){
+    }else if(input.pendingFilters.length >0){
+     //then transformations.
+     nextFilterId = input.pendingFilters.shift();
+    }else{
+        //finally fields selection.
+        nextFilterId = "selectFields";
+        input.fieldsSelected = true;
+    }
+    
+    /*else if (!input.fieldsSelected){
      //when validations are finished, select fields.
      nextFilterId = "selectFields";
      input.fieldsSelected = true;
     }else{
      //then we transform the remaining fields.
      nextFilterId = input.pendingFilters.shift();
-    }
+    }*/
     //console.log(`next filter id: ${nextFilterId}`);
     let next = queues.find((q)=>q.name == nextFilterId);
     if(next){
