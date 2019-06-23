@@ -16,7 +16,7 @@ class QueuePipeline extends AbstractPipeline {
     }
     run(input,callback) {
         if(hasRemainingFilters(input)){
-            this.callbacks[input.clientId] = callback;
+            this.callbacks[input.callbackId] = callback;
             sendToNextQueue(input,this.queues);
         }else{
             callback(null,input);
@@ -35,8 +35,8 @@ function setUpQueue(newQueue,queues,callbacks,filter){
                 if(hasRemainingFilters(result)){
                     sendToNextQueue(result,queues);
                 }else{
-                    let clientCallback = callbacks[result.clientId];
-                    delete callbacks[result.clientId]
+                    let clientCallback = callbacks[result.callbackId];
+                    delete callbacks[result.callbackId]
                     console.log('finished');
                     //the last filter
                     toContentType(result,(error,processedData) =>clientCallback(error,processedData))
@@ -64,8 +64,12 @@ function setUpQueue(newQueue,queues,callbacks,filter){
      //then we transform the remaining fields.
      nextFilterId = input.pendingFilters.shift();
     }
-    console.log(`next filter id: ${nextFilterId}`);
+    //console.log(`next filter id: ${nextFilterId}`);
     let next = queues.find((q)=>q.name == nextFilterId);
-    next.add(input, { removeOnComplete: true }); 
+    if(next){
+        next.add(input, { removeOnComplete: true }); 
+    }else{
+        console.log("no existe "+ nextFilterId);
+    }
  }
 

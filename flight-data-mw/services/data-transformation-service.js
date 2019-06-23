@@ -1,12 +1,13 @@
 const Pipeline = require('../pipeline/pipeline');
 const DataFields = require('../data-description/flight-data-fields').List;
-const glob = require('glob');
+const uuid = require('uuid/v1');
 
 module.exports = class DataTransformationsService{
 
-    constructor(){
+    constructor(filtersRepository){
         this.pipeline = new Pipeline();
-        setUpPipeline(this.pipeline);
+        this.filters = filtersRepository;
+        setUpPipeline(this.pipeline, this.filters);
     }
     
     async applyTransformations(data, connection){
@@ -34,7 +35,8 @@ function addRoutingInfo(data,connection){
     data.requestedFields = connection.requestedFields.slice();
     data.pendingFilters = connection.filtersIds.slice();
     data.contentType = connection.responseContentType;
-    data.clientId = connection.username;
+    //identify the callback
+    data.callbackId = uuid();
 }
 
 function removeRoutingInfo(data){
@@ -42,27 +44,14 @@ function removeRoutingInfo(data){
     delete data.pendingValidations;
     delete data.fieldsSelected;
     delete data.requestedFields;
-    delete data.clientId;
+    delete data.callbackId;
     delete data.contentType;
 }
 
-function setUpPipeline(pipeline){
-    //the same pipeline can be reused for validations, field selection and transformations.
-    let filter;
-    glob.sync( __dirname+ '/../filters/*.js' ).forEach( function( file ) {
-        filter = require(file);
-        if(typeof filter == "function"){
-            pipeline.use(filter);
-        }
-    });
+function setUpPipeline(pipeline, filtersRepository){
+    filtersRepository.getAllTransformations().forEach( t => pipeline.use(t));
     pipeline.use(selectFields);
-    let validation;
-    glob.sync( __dirname+ '/../validations/*.js' ).forEach( function( file ) {
-        validation = require(file);
-        if(typeof validation == "function"){
-            pipeline.use(validation);
-        }
-    });
+    filtersRepository.getAllValidations().forEach(v => pipeline.use(v));
 }
 //field selection filter, not dynamically provided.
 function selectFields(data, next){

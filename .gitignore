@@ -7,6 +7,6 @@ npm-debug.log
 flights.cvs
 airlines.cvs
 airports.cvs
-AvAuthFlightData/data
 av-auth-flight-data/data
+flight-data-mw/middleware.log
 ~

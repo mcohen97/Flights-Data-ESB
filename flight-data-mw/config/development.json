@@ -6,7 +6,11 @@
     "pipeline":{
         "pipe": "queue"
     },
+    "credentials":{
+        "secret":"ObligatorioArqSoft"
+    },
     "logger": {
         "type": "file"
     }
+
 }

@@ -8,18 +8,11 @@ let port = 3004;
 app.use(bodyParser.json());
 app.use(xmlparser());
 
-let publication_number = 1;
 
 app.post('/', function (req, res) {
-    console.log("\n");
-    console.log("----- PUBLICACION "+publication_number+" -----");
-    publication_number++;
+    //req.body.PUBLICATION.CLIENT_CHECKIN_TIMESTAMP = Date.now();
     console.log(req.body);
-    let mwTimeDifference = req.body["MW_CHECKOUT_TIMESTAMP"] - req.body["MW_CHECKIN_TIMESTAMP"];
-    let totalTime = Date.now() - req.body["PUBLISHER_CHECKOUT_TIMESTAMP"];
-    console.log("----- TIME IN MW: "+mwTimeDifference+" -----");
-    console.log("----- TOTAL TIME: "+totalTime+" -----");
-    
+
     res.status(200);
     res.json({
         message: 'ok got response!'
@@ -48,10 +41,11 @@ var args = {
             token: 'token',
             username: 'username',
             password: 'password',
-            requestedFields: ["FLIGHT_NUMBER","YEAR","CANCELLED"],
-            filtersIds: ["cancelledToBoolean", "printOnScreen"],
-            validationsIds: ["validDate","cancelled0or1"],
-            triggerExpression: 'YEAR >= 2015'
+            requestedFields: ["AIRLINE", "FLIGHT_NUMBER","ORIGIN_AIRPORT","DESTINATION_AIRPORT",
+            "SCHEDULED_DEPARTURE","CANCELLED","CANCELLATION_REASON"],
+            filtersIds: ["cancelledToBoolean", "printOnScreen","cancellationReasonToText"],
+            validationsIds: ["validDate","cancelled0or1","cancellationReasonProvided"],
+            triggerExpression: 'CANCELLED == 1'
 
         },
             
