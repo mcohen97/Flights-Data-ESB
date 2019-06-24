@@ -14,7 +14,6 @@ module.exports = class DataProcessService {
         for (let data of dataReceived) {
             data = formatMessage(data);
             let clientsConnections = await this.clients.getByIata(data.AIRLINE);
-            if([2336,258,1674,371,115,136].includes(data.FLIGHT_NUMBER)){
                 for(let client of clientsConnections){
                     let trigger = client.getTrigger();
                     if(trigger(data)){
@@ -22,7 +21,6 @@ module.exports = class DataProcessService {
                         this.filteringService.applyTransformations(job);
                     }
                 }
-            }
         }
     }
 
