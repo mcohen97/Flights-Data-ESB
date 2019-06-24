@@ -1,0 +1,16 @@
+{
+    "repository": {
+    "type": "mongodb",
+    "url": "mongodb://localhost:27017/flightDataDB"
+    },
+    "credentials":{
+        "secret":"ObligatorioArqSoft"
+    },
+    "logger": {
+        "type": "file"
+    },
+    "filters":{
+        "transformationsDir":"/../../flight-data-process/transformations/",
+        "validationsDir": "/../../flight-data-process/validations/"
+    }
+}

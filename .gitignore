@@ -4,9 +4,6 @@ npm-debug.log
 .env
 .DS_Store
 .vscode
-flights.cvs
-airlines.cvs
-airports.cvs
-av-auth-flight-data/data
-flight-data-mw/middleware.log
+*/*.cvs
+*/*.log
 ~

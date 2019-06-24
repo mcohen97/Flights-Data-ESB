@@ -1,0 +1,20 @@
+{
+    "repository": {
+        "type": "mongodb",
+        "url": "mongodb://localhost:27017/flightDataDB"
+    },
+    "pipeline":{
+        "pipe": "queue"
+    },
+    "credentials":{
+        "secret":"ObligatorioArqSoft"
+    },
+    "logger": {
+        "type": "file"
+    },
+    "filters":{
+        "transformationsDir":"/transformations/",
+        "validationsDir": "/validations/"
+    }
+
+}
