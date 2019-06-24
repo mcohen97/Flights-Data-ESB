@@ -9,9 +9,10 @@
     },
     "publish_config":{
         "start_row_index": 0,
-        "data_length": 100,
+        "data_length": 35,
         "interval": 100,
-        "number_messages": 10,
+        "number_messages": 1,
+
         "url": "http://localhost:6667/publish"
     },
     "port":8081

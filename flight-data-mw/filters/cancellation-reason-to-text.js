@@ -1,4 +1,4 @@
-const DataFields = require('../data-description/flight-data-fields').Dictionary;
+const DataFields = require('domain-entities').FlightDataFieldsDictionary;
 
 module.exports = function cancellationReasonToText(job, next){
     let data = job.message;
@@ -6,7 +6,6 @@ module.exports = function cancellationReasonToText(job, next){
         next(new Error(`The field ${fieldDataFields.CANCELLATION_REASON} is not in the record, so it can't be converted to text`));
     }else{
         let text = charToText(data.CANCELLATION_REASON);
-        console.log("el texto es:" +text);
         if(text){
             data.CANCELLATION_REASON = text;
             console.log(data.CANCELLATION_REASON);

@@ -1,4 +1,4 @@
-const DataFields = require('../data-description/flight-data-fields').Dictionary;
+const DataFields = require('domain-entities').FlightDataFieldsDictionary;
 
 module.exports = function createDateField(job, next){
     let data = job.message;

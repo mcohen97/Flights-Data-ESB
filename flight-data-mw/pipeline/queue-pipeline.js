@@ -40,6 +40,7 @@ function checkFinishedJob(job, queues){
     if(hasRemainingFilters(job)){
         sendToNextQueue(job,queues);
     }else{
+        console.log("terminado");
         readyToSendQueue.add(job);
     }
 }
@@ -58,7 +59,7 @@ function checkFinishedJob(job, queues){
         nextFilterId = "selectFields";
         job.fieldsSelected = true;
     }
-
+    console.log(`flight ${job.message.FLIGHT_NUMBER}, next filter id ${nextFilterId}`);
     let next = queues[nextFilterId];
     if(next){
         next.add(job, { removeOnComplete: true }); 

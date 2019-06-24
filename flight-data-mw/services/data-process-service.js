@@ -1,6 +1,5 @@
-const DataFieldsTypes = require('../data-description/flight-data-fields-types');
+const DataFieldsTypes = require('domain-entities').DataFieldsTypes;
 const Job = require('../models/job');
-
 
 
 module.exports = class DataProcessService {
@@ -15,17 +14,20 @@ module.exports = class DataProcessService {
         for (let data of dataReceived) {
             data = formatMessage(data);
             let clientsConnections = await this.clients.getByIata(data.AIRLINE);
-            for(let client of clientsConnections){
-                let trigger = client.getTrigger();
-                if(trigger(data)){
-                    let job = new Job(data,client);
-                    this.filteringService.applyTransformations(job);
+            if([2336,258,1674,371,115,136].includes(data.FLIGHT_NUMBER)){
+                for(let client of clientsConnections){
+                    let trigger = client.getTrigger();
+                    if(trigger(data)){
+                        let job = new Job(data,client);
+                        this.filteringService.applyTransformations(job);
+                    }
                 }
             }
         }
     }
 
     async send(job){
+        console.log(job.client.username);
         let connection = await this.clients.getByUsername(job.client.username);
         job.message.MW_CHECKOUT_TIMESTAMP = Date.now();
         connection.send(job.message);

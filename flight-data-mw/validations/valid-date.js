@@ -1,13 +1,16 @@
-const DataFields = require('../data-description/flight-data-fields').Dictionary;
+const DataFields = require('domain-entities').FlightDataFieldsDictionary;
 const Moment = require('moment'); 
 
 module.exports = function validDate(job, next){
     let data = job.message;
     if(!(DataFields.YEAR in data)){
+        console.log("ERROR DE FECHA");
         next(new Error(`The field ${DataFields.YEAR} is not in the record, date is invalid`));
     }else if(!(DataFields.MONTH in data)){
+        console.log("ERROR DE FECHA");
         next(new Error(`The field ${DataFields.MONTH} is not in the record, date is invalid`));
     }else if(!(DataFields.DAY in data)){
+        console.log("ERROR DE FECHA");
         next(new Error(`The field ${DataFields.DAY} is not in the record, date is invalid`));
     }else{
         let month=data.MONTH;
@@ -22,6 +25,7 @@ module.exports = function validDate(job, next){
             job.message = data;
             next(null,job);
         }else{
+            console.log("ERROR DE FECHA");
             next(new Error('Invalid date'));
         }
     }
