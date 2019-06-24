@@ -41,9 +41,9 @@ var args = {
             token: 'token',
             username: 'username',
             password: 'password',
-            requestedFields: ["AIRLINE", "FLIGHT_NUMBER","ORIGIN_AIRPORT","DESTINATION_AIRPORT",
+            requestedFields: ["DATE","AIRLINE", "FLIGHT_NUMBER","ORIGIN_AIRPORT","DESTINATION_AIRPORT",
             "SCHEDULED_DEPARTURE","CANCELLED","CANCELLATION_REASON"],
-            filtersIds: ["cancelledToBoolean", "printOnScreen","cancellationReasonToText"],
+            filtersIds: ["cancelledToBoolean", "createDateField","cancellationReasonToText"],
             validationsIds: ["validDate","cancelled0or1","cancellationReasonProvided"],
             triggerExpression: 'CANCELLED == 1'
 

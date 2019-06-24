@@ -1,82 +1,68 @@
 const AbstractPipeline = require('./abstract-pipeline');
 const toContentType = require('../services/content-type-transformation');
 const Queue = require('bull');
+const readyToSendQueue = new Queue("readyToSend");
+
 
 class QueuePipeline extends AbstractPipeline {
     constructor() {
         super();
         this.queues = [];
-        this.callbacks = {};
     }
     use(filter) {
         let filterQueue = new Queue(filter.name)
-        setUpQueue(filterQueue,this.queues, this.callbacks,filter);
-        this.queues.push(filterQueue);
+        setUpQueue(filterQueue,this.queues,filter);
+        this.queues[filter.name] = filterQueue;
         return super.use(filter);
     }
-    run(input,callback) {
-        if(hasRemainingFilters(input)){
-            this.callbacks[input.callbackId] = callback;
-            sendToNextQueue(input,this.queues);
-        }else{
-            callback(null,input);
-        }
+    run(job) {
+        checkFinishedJob(job, this.queues);
     }
 }
 module.exports = QueuePipeline;
 
-function setUpQueue(newQueue,queues,callbacks,filter){
-    newQueue.process((job, done) => {
-        filter.call(this, job.data, (err, result) => {
+function setUpQueue(newQueue,queues,filter){
+    newQueue.process((bullJob, done) => {
+        let job = bullJob.data;
+        filter.call(this, job, (err, jobResult) => {
             if (err) {
                 console.log("HAY UN ERROR: "+ err.message);
-                done();
             } else {
-                if(hasRemainingFilters(result)){
-                    sendToNextQueue(result,queues);
-                }else{
-                    let clientCallback = callbacks[result.callbackId];
-                    delete callbacks[result.callbackId]
-                    console.log('finished');
-                    //the last filter
-                    toContentType(result,(error,processedData) =>clientCallback(error,processedData))
-                    //clientCallback(null, result);
-                }
-                done();
+                jobResult;
+                checkFinishedJob(jobResult,queues);
             }
+            done();
         });
     });
 }
- function hasRemainingFilters(message){
-    return message.pendingFilters.length > 0 || !message.fieldsSelected ||message.pendingValidations > 0;
+
+function checkFinishedJob(job, queues){
+    if(hasRemainingFilters(job)){
+        sendToNextQueue(job,queues);
+    }else{
+        console.log("terminado");
+        readyToSendQueue.add(job);
+    }
+}
+
+ function hasRemainingFilters(job){
+    return job.pendingFilters.length > 0 || !job.fieldsSelected ||job.pendingValidations > 0;
  }
 
- function sendToNextQueue(input,queues){
+ function sendToNextQueue(job,queues){
     let nextFilterId;
-    if(input.pendingValidations.length >0){
-     //validations first.
-     nextFilterId = input.pendingValidations.shift();
-    }else if(input.pendingFilters.length >0){
-     //then transformations.
-     nextFilterId = input.pendingFilters.shift();
-    }else{
-        //finally fields selection.
+    if(job.pendingValidations.length >0){   //validations first.
+        nextFilterId = job.pendingValidations.shift();
+    }else if(job.pendingFilters.length >0){ //then transformations.
+        nextFilterId = job.pendingFilters.shift();
+    }else{  //finally fields selection.
         nextFilterId = "selectFields";
-        input.fieldsSelected = true;
+        job.fieldsSelected = true;
     }
-    
-    /*else if (!input.fieldsSelected){
-     //when validations are finished, select fields.
-     nextFilterId = "selectFields";
-     input.fieldsSelected = true;
-    }else{
-     //then we transform the remaining fields.
-     nextFilterId = input.pendingFilters.shift();
-    }*/
-    //console.log(`next filter id: ${nextFilterId}`);
-    let next = queues.find((q)=>q.name == nextFilterId);
+    console.log(`flight ${job.message.FLIGHT_NUMBER}, next filter id ${nextFilterId}`);
+    let next = queues[nextFilterId];
     if(next){
-        next.add(input, { removeOnComplete: true }); 
+        next.add(job, { removeOnComplete: true }); 
     }else{
         console.log("no existe "+ nextFilterId);
     }

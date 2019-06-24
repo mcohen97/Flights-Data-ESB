@@ -2,7 +2,8 @@ const Logger = require("./abstract-logger");
 const log4js = require('log4js');
 log4js.configure({
     appenders: { middleware: { type: 'file', filename: 'middleware.log' } },
-    categories: { default: { appenders: ['middleware'], level : 'info'} }
+    categories: { default: { appenders: ['middleware'], level : 'info'} },
+    pm2: true
   });
 
 module.exports = class Logger4js extends Logger {

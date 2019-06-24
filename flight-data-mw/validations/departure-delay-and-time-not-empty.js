@@ -1,6 +1,7 @@
 const DataFields = require('domain-entities').FlightDataFieldsDictionary;
 
-module.exports = function departureDelayAndTimeNotEmpty(data, next){
+module.exports = function departureDelayAndTimeNotEmpty(job, next){
+    let data = job.message;
     if(!(DataFields.DEPARTURE_TIME in data)){
         next(new Error(`The field ${DataFields.DEPARTURE_TIME} is not in the record`));
     }else if(!(DataFields.DEPARTURE_DELAY in data)){
@@ -13,7 +14,8 @@ module.exports = function departureDelayAndTimeNotEmpty(data, next){
         }else if(departureDelayEmpty){
             next(new Error(`The field ${DataFields.DEPARTURE_DELAY} is empty`));
         }else{
-            next(null,data);
+            job.message = data;
+            next(null,job);
         }
     }
 }

@@ -1,4 +1,5 @@
 const DataFieldsTypes = require('domain-entities').DataFieldsTypes;
+const Job = require('../models/job');
 
 
 module.exports = class DataProcessService {
@@ -12,26 +13,25 @@ module.exports = class DataProcessService {
         console.log(dataReceived.length);
         for (let data of dataReceived) {
             data = formatMessage(data);
-            let connections = await this.clients.getByIata(data.AIRLINE);
-
-            for(let connection of connections){
-                let trigger = connection.getTrigger();
-                if(trigger(data)){
-                    filterValidateAndSend(this.filteringService, connection, data);
+            let clientsConnections = await this.clients.getByIata(data.AIRLINE);
+            if([2336,258,1674,371,115,136].includes(data.FLIGHT_NUMBER)){
+                for(let client of clientsConnections){
+                    let trigger = client.getTrigger();
+                    if(trigger(data)){
+                        let job = new Job(data,client);
+                        this.filteringService.applyTransformations(job);
+                    }
                 }
             }
         }
     }
-}
 
-async function filterValidateAndSend(filteringService, client, data){
-
-    let processedData =filteringService.applyTransformations(data,client);
-    processedData.then((result) => {
-                console.log("procesado, resultado: ");
-                result.MW_CHECKOUT_TIMESTAMP = Date.now();
-                client.send(result);})
-                 .catch((err) => client.send({error: `${err.toString()} stacktrace: ${err.stack}`}));
+    async send(job){
+        console.log(job.client.username);
+        let connection = await this.clients.getByUsername(job.client.username);
+        job.message.MW_CHECKOUT_TIMESTAMP = Date.now();
+        connection.send(job.message);
+    }
 }
 
 function formatMessage(object) {

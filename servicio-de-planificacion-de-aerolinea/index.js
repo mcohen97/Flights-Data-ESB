@@ -44,7 +44,7 @@ var args = {
             token: 'token',
             username: 'admin',
             password: 'admin',
-            requestedFields: ["FLIGHT_NUMBER","ORIGIN_AIRPORT","DESTINATION_AIRPORT","SCHEDULED_DEPARTURE",
+            requestedFields: ["DATE","FLIGHT_NUMBER","ORIGIN_AIRPORT","DESTINATION_AIRPORT","SCHEDULED_DEPARTURE",
             "DEPARTURE_DELAY","DEPARTURE_TIME","SCHEDULED_ARRIVAL","ARRIVAL_TIME","DELAY_REASON"],
             filtersIds: ["createDateField", "giveDelayReason"],
             validationsIds: ["validDate","departureDelayAndTimeNotEmpty"],

@@ -12,9 +12,6 @@ module.exports.initServer = async function () {
     const ConnectionsService = require('./services/connections-service');
     const DataProcessService = require('./services/data-process-service');
 
-    const Queue = require('bull');
-    const publishedFlightsQueue = new Queue("data");
-
     const airlinesServicesRepository = new AirlinesClientsRepository();
     let transformationsDirectory = __dirname + Config.get("filters.transformationsDir");
     let validationsDirectory = __dirname + Config.get("filters.validationsDir");
@@ -25,11 +22,19 @@ module.exports.initServer = async function () {
 
     connectionsService.loadPreviousRegisteredClients();
 
-    publishedFlightsQueue.process(2,(job,done) =>{
-        //console.log("job processed - "+jobNumber);
-        //console.log("   data length: "+job.data.length);
-        //jobNumber++;
-        dataProccesService.executeTriggers(job.data);
+    const Queue = require('bull');
+    const incomingDataQueue = new Queue("data");
+    const readyToSendQueue = new Queue("readyToSend");
+
+    incomingDataQueue.process((bullJob,done) =>{
+        let dataList = bullJob.data
+        dataProccesService.executeTriggers(dataList);
         done();
-    })
+    });
+    readyToSendQueue.process((bullJob,done) =>{
+        let job = bullJob.data;
+        console.log('enviando');
+        dataProccesService.send(job);
+        done();
+    });
 }

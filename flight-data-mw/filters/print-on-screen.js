@@ -1,4 +1,4 @@
-module.exports = function printOnScreen(data,next){
+module.exports = function printOnScreen(job,next){
     //console.log('pasa por el filtro un dato: '+ data);
-    next(null,data);
+    next(null,job);
 }
