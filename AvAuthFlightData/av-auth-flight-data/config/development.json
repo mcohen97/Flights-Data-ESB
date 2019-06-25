@@ -9,9 +9,9 @@
     },
     "publish_config":{
         "start_row_index": 0,
-        "data_length": 50000,
+        "data_length": 0000,
         "interval": 0,
-        "number_messages": 50,
+        "number_messages": 0,
 
         "url": "http://localhost:6667/publish"
     },
