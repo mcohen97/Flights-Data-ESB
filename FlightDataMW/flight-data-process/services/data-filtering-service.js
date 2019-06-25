@@ -40,6 +40,5 @@ function selectFields(job, next){
             delete job.message[key];
         }
     }
-    console.log("datos seleccionados");
     next(null,job);
 }

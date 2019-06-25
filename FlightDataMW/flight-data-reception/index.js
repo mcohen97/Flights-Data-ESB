@@ -5,7 +5,7 @@ const port = 6667;
 
 const routes= require('./controllers/router').router;
 
-app.use(bodyParser.json({limit:'999mb', pretty: true }));
+app.use(bodyParser.json({limit:'2048mb', pretty: true }));
 app.use(routes);
 let server = app.listen(port, function () {
 

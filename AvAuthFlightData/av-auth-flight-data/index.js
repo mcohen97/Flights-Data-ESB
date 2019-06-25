@@ -5,6 +5,8 @@ const router = require('./controllers/router');
 const FlightService = require('./services/flightService');
 const axios = require('axios')
 var config = require('config');
+const followRedirects = require('follow-redirects');
+followRedirects.maxBodyLength = 2048*1024*1024 // 2GB
 
 let dataLength = config.get("publish_config.data_length");
 let interval = config.get("publish_config.interval");
@@ -49,8 +51,8 @@ async function sendMessages(offset,length, interval, count, url){
         send(messages,url);
         await sleep(interval);
     }
-    console.log("AA LIST:");
-    console.log(messagesSent["AA"].toString());
+ //   console.log("AA LIST:");
+//    console.log(messagesSent["AA"].toString());
     console.log("AA COUNT:");
     console.log(messagesSent["AA"].length);
 
