@@ -7,14 +7,23 @@
         "pipe": "queue"
     },
     "credentials":{
-        "secret":"ObligatorioArqSoft"
+        "secret": "ObligatorioArqSoft"
     },
     "logger": {
         "type": "file"
     },
     "filters":{
-        "transformationsDir":"/transformations/",
+        "transformationsDir": "/transformations/",
         "validationsDir": "/validations/"
+    },
+    "queues":{
+        "toProcess":{
+            "name": "data",
+            "url": "redis://127.0.0.1:6379"
+        },
+        "readyToSend":{
+            "name":"readyToSend"
+        }
     }
 
 }

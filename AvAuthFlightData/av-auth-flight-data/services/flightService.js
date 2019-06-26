@@ -1,5 +1,5 @@
 const FlightRepository = require('../repositories/repository')('flight');
-const CACHE_SIZE_LIMIT = 2500001
+const CACHE_SIZE_LIMIT = 100001
 
 module.exports = class FlightService {
       constructor() {
