@@ -15,15 +15,36 @@ module.exports = class DataProcessService {
     async executeTriggers(dataReceived) {
 
         for (let data of dataReceived) {
-            data = formatMessage(data);
-            let clientsConnections = await this.clients.getByIata(data.AIRLINE);
-                for(let client of clientsConnections){
-                    let trigger = client.getTrigger();
-                    if(trigger(data)){
-                        let job = new Job(data,client);
-                        this.filteringService.applyTransformations(job);
+            let airline = this.getAirline(data);
+            let clientsConnections = await this.clients.getByIata(airline);
+                if(clientsConnections && clientsConnections.length > 0){
+                    try{
+                    data = formatMessage(data);//only format data for existing airlines with subscribed services.
+                    this.evaluateTriggers(clientsConnections,data);
+                    }catch(err){
+                        logger.logError(`invalid record ${err.message}`);
                     }
                 }
+        }
+    }
+
+     getAirline(data){
+        if("airline" in data){
+            return data.airline;
+        }else if("AIRLINE" in data){
+            return data.AIRLINE;
+        }else{
+            return "";
+        }
+    }
+
+    async evaluateTriggers(clientsConnections,data){
+        for(let client of clientsConnections){
+            let trigger = client.getTrigger();
+            if(trigger(data)){
+                let job = new Job(data,client);
+                this.filteringService.applyTransformations(job);
+            }
         }
     }
 
