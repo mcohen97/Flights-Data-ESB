@@ -22,18 +22,23 @@ module.exports.initServer = async function () {
 
     connectionsService.loadPreviousRegisteredClients();
 
+    let incomingDataQueueName = Config.get('queues.toProcess.name');
+    let incomingDataQueueUrl = Config.get('queues.toProcess.url');
+    let readyToSendQueueName = Config.get('queues.readyToSend.name');
+    
     const Queue = require('bull');
-    const incomingDataQueue = new Queue("data");
-    const readyToSendQueue = new Queue("readyToSend");
+    const incomingDataQueue = new Queue(incomingDataQueueName, incomingDataQueueUrl);
+    const readyToSendQueue = new Queue(readyToSendQueueName);
 
     incomingDataQueue.process((bullJob,done) =>{
         let dataList = bullJob.data
-        logger.logInfo(`received ${dataList.length} flight records`);
+        logger.logInfo(`Picked from pending data queue, a bulk of ${dataList.length} flight records`);
         dataProccesService.executeTriggers(dataList);
         done();
     });
     readyToSendQueue.process((bullJob,done) =>{
         let job = bullJob.data;
+        logger.logInfo("Sending flight data to service of username: " + job.client.username);
         dataProccesService.send(job);
         done();
     });

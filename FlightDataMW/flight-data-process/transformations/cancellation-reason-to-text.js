@@ -8,7 +8,6 @@ module.exports = function cancellationReasonToText(job, next){
         let text = charToText(data.CANCELLATION_REASON);
         if(text){
             data.CANCELLATION_REASON = text;
-            console.log(data.CANCELLATION_REASON);
             job.message = data;
             next(null,job);
         }else{

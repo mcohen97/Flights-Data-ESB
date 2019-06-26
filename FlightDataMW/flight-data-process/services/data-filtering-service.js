@@ -1,6 +1,5 @@
 const Pipeline = require('../pipeline/pipeline');
 const DataFields = require('business-logic').FlightDataFieldsList;
-const uuid = require('uuid/v1');
 
 module.exports = class DataTransformationsService{
 
@@ -23,16 +22,13 @@ function addRoutingInfo(job){
     job.requestedFields = job.client.requestedFields.slice();
     job.pendingFilters = job.client.filtersIds.slice();
     job.contentType = job.client.responseContentType;
-    console.log(`el servicio tiene transformaciones: ${job.pendingFilters} y validaciones: ${job.pendingValidations}`);
 }
 
 function setUpPipeline(pipeline, filtersRepository){
     filtersRepository.getAllTransformations().forEach( t => pipeline.use(t));
     pipeline.use(selectFields);
     filtersRepository.getAllValidations().forEach(v => pipeline.use(v));
-    filtersRepository.onFilterAdded(filter => {
-        console.log(`nuevo filtro ${filter.name}`);
-        pipeline.use(filter);});
+    filtersRepository.onFilterAdded(filter => {pipeline.use(filter);});
 }
 
 //field selection filter, not dynamically provided.
@@ -44,6 +40,5 @@ function selectFields(job, next){
             delete job.message[key];
         }
     }
-    console.log("datos seleccionados");
     next(null,job);
 }

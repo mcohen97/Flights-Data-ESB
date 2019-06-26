@@ -10,7 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "business-logic": "../business-logic/",
+    "chokidar": "^3.0.1",
     "config": "^3.1.0",
+    "glob": "^7.1.4",
     "mongoose": "^5.6.1"
   }
 }

@@ -32,7 +32,7 @@ module.exports.initServer = async function () {
         let host = server.address().address
         let port = server.address().port
 
-        logger.logInfo("app listening");
+        logger.logInfo('Service initialized and listening at http://%s:%s');
         console.log('App listening at http://%s:%s', host, port)
     });
 }

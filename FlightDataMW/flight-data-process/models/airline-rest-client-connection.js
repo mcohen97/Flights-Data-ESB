@@ -14,24 +14,26 @@ module.exports= class AirlineRestClient extends AirlineClient{
         let endpoint = `${this.url}:${this.port}`;
         let args = {
             data: data,
-            headers: { "Content-Type": getContentTypeHeader(this.responseContentType) }
+            headers: { "Content-Type": getContentTypeHeader(this.responseContentType),
+                        "Authorization": `Bearer ${this.token}` }//the token given by the service in registration.
         };
         let req = client.post(endpoint, args, function (received, response) {
         });
 
+        let username = this.username;
+
         req.on('requestTimeout', function (req) {
-            console.log('request has expired');
+            console.log(`Request timeout error while sending to ${username}`);
             req.abort();
         });
          
         req.on('responseTimeout', function (res) {
-            console.log('response has expired');
-         
+            console.log(`Response timeout error while sending to ${username}`);
         });
          
-        //it's usefull to handle request errors to avoid, for example, socket hang up errors on request timeouts
+        //it's useful to handle request errors to avoid, for example, socket hang up errors on request timeouts
         req.on('error', function (err) {
-            console.log('request error');
+            console.log(`Request error while sending to ${username}`);
         });
     }
 }

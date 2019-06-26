@@ -13,7 +13,7 @@ module.exports = class DataProcessService {
     }
 
     async executeTriggers(dataReceived) {
-        console.log(`llegaron datos ${dataReceived.length}`);
+
         for (let data of dataReceived) {
             data = formatMessage(data);
             let clientsConnections = await this.clients.getByIata(data.AIRLINE);
@@ -28,7 +28,6 @@ module.exports = class DataProcessService {
     }
 
     async send(job){
-        console.log(`sending data from flight ${job.message.FLIGHT_NUMBER}, to ${job.client.username}`);
         let connection = await this.clients.getByUsername(job.client.username);
         job.message.MW_CHECKOUT_TIMESTAMP = Date.now();
         connection.send(job.message);

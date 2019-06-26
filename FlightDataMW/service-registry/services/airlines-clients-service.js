@@ -2,6 +2,8 @@ const AirlineClientDataFactory = require('business-logic').ServiceFactory;
 const jwt = require('jsonwebtoken');
 const ConnectionPublisher = require('./connection-publisher');
 const Config = require('config');
+const Logger = require('logger')(Config.get('logger.type'));
+const logger = new Logger();
 
 module.exports = class AirlinesClientsService {
 
@@ -13,18 +15,23 @@ module.exports = class AirlinesClientsService {
     }
 
     async add(data) {
- 
-        await this.authentication.login(airlineClientData.username, airlineClientData.password);
+        try{
+        await this.authentication.login(data.username, data.password);
 
         //validate and format data with factory.
         let airlineClientData = AirlineClientDataFactory.createClientData(data);
         
-        this.clientsRepository.add(airlineClientData);
-        this.newConnections.publish(airlineClientData);
+        await this.clientsRepository.add(airlineClientData);
+        await this.newConnections.publish(airlineClientData);
 
-        this.authentication.deleteUsedCredential(airlineClientData.username);
+        await this.authentication.deleteUsedCredential(airlineClientData.username);
+        logger.logInfo(`Service registered successfully, used credentials: ${data.username}`);
         let token =jwt.sign({ clientId: airlineClientData.username}, Config.get('credentials.secret'));
         return token;
+        }catch(error){
+            logger.logError(`Username used: ${data.username}, error: ${error.message}`);
+            throw error;
+        }
     }
 
     async update(username,data){
@@ -34,8 +41,13 @@ module.exports = class AirlinesClientsService {
         if(!exists){
             throw new Error('Cannot update, service does not exist');
         }else{
-            this.clientsRepository.update(airlineClientData);
-            this.updatedConnections.publish({username:username, updatedData:data});
+            try{
+                await this.clientsRepository.update(airlineClientData);
+                this.updatedConnections.publish({username:username, updatedData:data});
+            }catch(error){
+                logger.logError(`error: ${error.message}, while trying to update its data`);
+                throw error;
+            }
         }
         return true;
     }
