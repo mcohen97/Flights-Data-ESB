@@ -6,7 +6,7 @@ module.exports = class ServiceRegistry{
 
     async register(req,res){
         let client = req.body;
-        client.responseContentType = req.accepts(['json','xml','text']);
+        client.responseContentType = req.accepts(["json","xml","text"]);
         let message;
         try{
             let token =await this.clients.add(client);

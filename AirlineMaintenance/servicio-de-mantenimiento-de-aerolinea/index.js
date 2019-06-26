@@ -51,7 +51,7 @@ var args = {
             "SCHEDULED_DEPARTURE","CANCELLED","CANCELLATION_REASON"],
             filtersIds: ["cancelledToBoolean", "createDateField","cancellationReasonToText"],
             validationsIds: ["validDate","cancelled0or1","cancellationReasonProvided"],
-            triggerExpression: 'YEAR>2015'
+            triggerExpression: 'CANCELLED == 1'
 
         },
             
@@ -63,9 +63,9 @@ try{
     /*client.post("http://localhost:6666/register", args, function (data, response) {
         console.log(data);
     });*/
-    client.put("http://localhost:6666/update/username", args, function (data, response) {
+    /*client.put("http://localhost:6666/update/username", args, function (data, response) {
         console.log(data);
-    });
+    });*/
 }catch(error){
 
 }

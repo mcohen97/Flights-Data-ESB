@@ -1,9 +1,9 @@
 const js2xmlparser = require("js2xmlparser");
 
 
-  module.exports = function toContentType(data, next){
+  module.exports = function toContentType(data, contentType, next){
     let result;
-    switch (data.contentType.toUpperCase()) {
+    switch (contentType.toUpperCase()) {
         case 'JSON': 
              result = renderJSON(data);
             break;
@@ -14,7 +14,7 @@ const js2xmlparser = require("js2xmlparser");
             result= data;
             break;
     }
-    next(null,data);
+    next(null,result);
 }
 
 function renderJSON(data) {
@@ -26,5 +26,5 @@ function renderXML(data) {
 }
 
 function renderText(data){
-
+    return data;
 }

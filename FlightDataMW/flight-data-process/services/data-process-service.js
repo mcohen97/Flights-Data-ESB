@@ -3,6 +3,8 @@ const Job = require('../models/job');
 const Config = require('config');
 const Logger = require('logger')(Config.get('logger.type'));
 const logger = new Logger();
+const toContentType = require('./content-type-transformation');
+
 
 
 module.exports = class DataProcessService {
@@ -51,7 +53,7 @@ module.exports = class DataProcessService {
     async send(job){
         let connection = await this.clients.getByUsername(job.client.username);
         job.message.MW_CHECKOUT_TIMESTAMP = Date.now();
-        connection.send(job.message);
+        toContentType(job.message,job.contentType ,(err,converted)=>connection.send(converted));
     }
 }
 
