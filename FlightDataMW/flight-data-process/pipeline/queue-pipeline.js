@@ -1,7 +1,9 @@
 const AbstractPipeline = require('./abstract-pipeline');
-const toContentType = require('../services/content-type-transformation');
 const Queue = require('bull');
 const readyToSendQueue = new Queue("readyToSend");
+const Config = require('config');
+const Logger = require('logger')(Config.get('logger.type'));
+const logger = new Logger();
 
 
 class QueuePipeline extends AbstractPipeline {
@@ -26,7 +28,7 @@ function setUpQueue(newQueue,queues,filter){
         let job = bullJob.data;
         filter.call(this, job, (err, jobResult) => {
             if (err) {
-                console.log("HAY UN ERROR: "+ err.message);
+                logger.logError(`Filtering error, ${err.message}`);
             } else {
                 jobResult;
                 checkFinishedJob(jobResult,queues);
@@ -59,12 +61,13 @@ function checkFinishedJob(job, queues){
         nextFilterId = "selectFields";
         job.fieldsSelected = true;
     }
-    console.log(`flight ${job.message.FLIGHT_NUMBER}, next filter id ${nextFilterId}`);
+    console.log(`flight ${job.message.FLIGHT_NUMBER}, for ${job.client.username}, next filter id ${nextFilterId}`);
     let next = queues[nextFilterId];
     if(next){
         next.add(job, { removeOnComplete: true }); 
     }else{
         console.log("no existe "+ nextFilterId);
+        logger.logError(`no existe ${nextFilterId}`);
     }
  }
 

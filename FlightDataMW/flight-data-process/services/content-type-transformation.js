@@ -1,8 +1,6 @@
-//const convert = require('xml-js');
 const js2xmlparser = require("js2xmlparser");
 
 
-//module.exports = () => { return async (data, next) => {
   module.exports = function toContentType(data, next){
       console.log('conversion de tipo');
     let result;
@@ -18,9 +16,7 @@ const js2xmlparser = require("js2xmlparser");
             break;
     }
     next(null,data);
-    //return result;
 }
-//}};
 
 function renderJSON(data) {
     console.log("conversion json");
@@ -28,7 +24,6 @@ function renderJSON(data) {
 }
 
 function renderXML(data) {
-    //return convert.js2xml(data, { compact: true });
     console.log("conversion xml");
     return js2xmlparser.parse("flight", data)
 }

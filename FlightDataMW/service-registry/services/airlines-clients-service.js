@@ -13,10 +13,11 @@ module.exports = class AirlinesClientsService {
     }
 
     async add(data) {
+ 
+        await this.authentication.login(airlineClientData.username, airlineClientData.password);
+
         //validate and format data with factory.
         let airlineClientData = AirlineClientDataFactory.createClientData(data);
-
-        await this.authentication.login(airlineClientData.username, airlineClientData.password);
         
         this.clientsRepository.add(airlineClientData);
         this.newConnections.publish(airlineClientData);

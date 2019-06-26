@@ -1,5 +1,8 @@
 const DataFieldsTypes = require('business-logic').DataFieldsTypes;
 const Job = require('../models/job');
+const Config = require('config');
+const Logger = require('logger')(Config.get('logger.type'));
+const logger = new Logger();
 
 
 module.exports = class DataProcessService {
@@ -10,7 +13,7 @@ module.exports = class DataProcessService {
     }
 
     async executeTriggers(dataReceived) {
-        console.log(dataReceived.length);
+        console.log(`llegaron datos ${dataReceived.length}`);
         for (let data of dataReceived) {
             data = formatMessage(data);
             let clientsConnections = await this.clients.getByIata(data.AIRLINE);
@@ -25,7 +28,7 @@ module.exports = class DataProcessService {
     }
 
     async send(job){
-        console.log(job.client.username);
+        console.log(`sending data from flight ${job.message.FLIGHT_NUMBER}, to ${job.client.username}`);
         let connection = await this.clients.getByUsername(job.client.username);
         job.message.MW_CHECKOUT_TIMESTAMP = Date.now();
         connection.send(job.message);

@@ -23,12 +23,16 @@ function addRoutingInfo(job){
     job.requestedFields = job.client.requestedFields.slice();
     job.pendingFilters = job.client.filtersIds.slice();
     job.contentType = job.client.responseContentType;
+    console.log(`el servicio tiene transformaciones: ${job.pendingFilters} y validaciones: ${job.pendingValidations}`);
 }
 
 function setUpPipeline(pipeline, filtersRepository){
     filtersRepository.getAllTransformations().forEach( t => pipeline.use(t));
     pipeline.use(selectFields);
     filtersRepository.getAllValidations().forEach(v => pipeline.use(v));
+    filtersRepository.onFilterAdded(filter => {
+        console.log(`nuevo filtro ${filter.name}`);
+        pipeline.use(filter);});
 }
 
 //field selection filter, not dynamically provided.

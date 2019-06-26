@@ -9,4 +9,5 @@ npm-debug.log
 AvAuthFlightData/av-auth-flight-data/data/
 FlightDataMW/flight-data-process/middleware.log
 FlightDataMW/service-registry/middleware.log
+FlightDataMW/flight-data-reception/middleware.log
 ~

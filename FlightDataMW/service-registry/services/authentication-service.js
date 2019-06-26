@@ -16,11 +16,11 @@ module.exports= class AuthenticationService{
         }
         
         if(!availableCredentialExists){
-            throw new Error('client not found');
+            throw new Error('incorrect username or password');
         }
         let credentials = await this.credentialsRepository.get(username);
         if(credentials.password != password){
-            throw new Error('incorrect password');
+            throw new Error('incorrect username or password');
         }
         return credentials;
     }

@@ -28,12 +28,12 @@ module.exports.initServer = async function () {
 
     incomingDataQueue.process((bullJob,done) =>{
         let dataList = bullJob.data
+        logger.logInfo(`received ${dataList.length} flight records`);
         dataProccesService.executeTriggers(dataList);
         done();
     });
     readyToSendQueue.process((bullJob,done) =>{
         let job = bullJob.data;
-        console.log('enviando');
         dataProccesService.send(job);
         done();
     });

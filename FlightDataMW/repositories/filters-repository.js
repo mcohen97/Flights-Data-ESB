@@ -31,8 +31,15 @@ module.exports = class FiltersRepository{
         return this.validations.map(function(f){return f.name});
     }
 
-    onTransformationAdded(callback){
-        this.filtersWatcher.on('add', path => callback(`File ${path} has been added`))
+    onFilterAdded(callback){
+        this.filtersWatcher.on('add', path => {
+            if(path.endsWith('.js')){
+                let filter = require(path);
+                if(typeof filter == "function"){
+                    callback(filter);
+                }
+            }
+        })
     }
 }
 
