@@ -84,8 +84,8 @@ function testing(req){
     mwAverage = mwTimeAccum/publication_number;
     totalAverage = totalTimeAccum/publication_number;
     if(first){
-        start = req.body.publisher_checkout_timestamp;
-        startMw = req.body.mw_checkin_timestamp;
+        start = req.body["PUBLISHER_CHECKOUT_TIMESTAMP"];
+        startMw = req.body["MW_CHECKIN_TIMESTAMP"];
         first = false;
     }
     end = Date.now();
