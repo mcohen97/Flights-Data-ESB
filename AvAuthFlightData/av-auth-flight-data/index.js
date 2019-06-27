@@ -2,11 +2,16 @@ const Koa = require('koa');
 const logger = require('koa-logger');
 const json = require('koa-json');
 const router = require('./controllers/router');
-const FlightService = require('./services/flightService');
+
 const axios = require('axios')
 var config = require('config');
 const followRedirects = require('follow-redirects');
 followRedirects.maxBodyLength = 2048*1024*1024 // 2GB
+
+const FlightService = require('./services/flightService');
+const AirlineService = require('./services/airlineService');
+const AirportService = require('./services/airportService');
+ 
 
 let dataLength = config.get("publish_config.data_length");
 let interval = config.get("publish_config.interval");
@@ -35,12 +40,19 @@ sendMessages(initial_line, dataLength, interval, number_messages, publish_url);
 
 async function sendMessages(offset,length, interval, count, url){
     const flightService = new FlightService();
+    const airlineService = new AirlineService();
+    const airportService = new AirportService();
     await flightService.load();
     for(let messageNumber = 0; messageNumber < count; messageNumber++){
         let messages = await flightService.getAll(length,offset);
         offset += length
         for(message of messages){
+            message.airline_name= await airlineService.getByIataCode(message.airline)
             message.publisher_checkout_timestamp = Date.now();
+            destination_airport= await airportService.getByIataCode(message.destination_airport);
+            origin_airport= await airportService.getByIataCode(message.origin_airport);
+            message.destination_airport_name = destination_airport.name;
+            message.origin_airport_name = origin_airport.name;
             if(!messagesSent[message["airline"]])
                 messagesSent[message["airline"]] = []
             messagesSent[message["airline"]].push(message["flight_number"]);

@@ -1,6 +1,7 @@
 {
     "repository": {
-        "type": "memory"
+        "type": "memory",
+        "flights_memory_load":10
     },
     "data": {
         "file_airlines": "./data/airlines.csv",
@@ -12,7 +13,6 @@
         "data_length": 35,
         "interval": 0,
         "number_messages": 1,
-
         "url": "http://localhost:6667/publish"
     },
     "port":8081
