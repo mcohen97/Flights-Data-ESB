@@ -48,7 +48,7 @@ var args = {
             token: 'token',
             username: 'admin',
             password: 'admin',
-            requestedFields: ["DATE","AIRLINE","FLIGHT_NUMBER","ORIGIN_AIRPORT","DESTINATION_AIRPORT","SCHEDULED_DEPARTURE",
+            requestedFields: ["DATE","AIRLINE", "AIRLINE_NAME", "ORIGIN_AIRPORT_NAME", "DESTINATION_AIRPORT_NAME","FLIGHT_NUMBER","ORIGIN_AIRPORT","DESTINATION_AIRPORT","SCHEDULED_DEPARTURE",
             "DEPARTURE_DELAY","DEPARTURE_TIME","SCHEDULED_ARRIVAL","ARRIVAL_TIME","DELAY_REASON"],
             filtersIds: ["createDateField", "giveDelayReason"],
             validationsIds: ["validDate","departureDelayAndTimeNotEmpty"],
@@ -65,9 +65,9 @@ try{
     client.post("http://localhost:6666/register", args, function (data, response) {
         console.log(data);
     });
-     /*  client.put("http://localhost:6666/update/admin", args, function (data, response) {
+       client.put("http://localhost:6666/update/admin", args, function (data, response) {
         console.log(data);
-    });*/
+    });
 }catch(error){
 
 }
@@ -77,8 +77,8 @@ function testing(req){
     console.log("\n");
     console.log("----- PUBLICACION "+publication_number+" -----");
     console.log(req.body);
-    let mwTimeDifference = req.body.mw_checkout_timestamp - req.body.mw_checkin_timestamp;
-    let totalTime = Date.now() - req.body["publisher_checkout_timestamp"];
+    let mwTimeDifference = req.body.MW_CHECKOUT_TIMESTAMP - req.body.MW_CHECKIN_TIMESTAMP;
+    let totalTime = Date.now() - req.body.PUBLISHER_CHECKOUT_TIMESTAMP;
     mwTimeAccum += mwTimeDifference;
     totalTimeAccum += totalTime;
     mwAverage = mwTimeAccum/publication_number;
