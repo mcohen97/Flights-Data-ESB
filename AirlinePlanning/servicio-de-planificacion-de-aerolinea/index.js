@@ -65,9 +65,9 @@ try{
     client.post("http://localhost:6666/register", args, function (data, response) {
         console.log(data);
     });
-       client.put("http://localhost:6666/update/admin", args, function (data, response) {
+    /*   client.put("http://localhost:6666/update/admin", args, function (data, response) {
         console.log(data);
-    });
+    });*/
 }catch(error){
 
 }

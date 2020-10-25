@@ -13,7 +13,8 @@ module.exports = class ConnectionsService {
         this.newConnections = new ConnectionSubscriber('new-connections');
         this.updatedConnections = new ConnectionSubscriber('updated-connections');
         this.newConnections.subscribe((connectionData) => this.addConnection(connectionData));
-        this.updatedConnections.subscribe((connectionData)=> this.updateConnections(connectionData.username, connectionData.updatedData));
+        this.updatedConnections.subscribe((connectionData)=> 
+        this.updateConnections(connectionData.username, connectionData.updatedData));
     }
 
     async getAll() {
@@ -36,10 +37,11 @@ module.exports = class ConnectionsService {
     }
 
     async updateConnections(username, updatedData){
-        for(let i=0; i < this.connections.length; i++){
+        let conn =ClientConnectionFactory.createConnection(updatedData);
+        for(let i = 0; i < this.connections.length; i++){
             let service = this.connections[i];
             if(service.username == username){
-                updateFields(service,updatedData);
+                updateFields(service,conn);
                 break;
             }
         }

@@ -61,7 +61,7 @@ function checkFinishedJob(job, queues){
         job.fieldsSelected = true;
     }
 
-    logger.logInfo(`flight ${job.message.FLIGHT_NUMBER}, next filter id ${nextFilterId}`);
+    logger.logInfo(`flight ${job.message.FLIGHT_NUMBER} for ${job.client.username}, next filter id ${nextFilterId}`);
     let next = queues[nextFilterId];
     if(next){
         next.add(job, { removeOnComplete: true }); 

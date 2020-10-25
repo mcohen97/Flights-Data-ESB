@@ -37,7 +37,7 @@ var server = app.listen(port, function () {
 var Client = require('node-rest-client').Client;
  
 var client = new Client();
-var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnRJZCI6InVzZXJuYW1lIiwiaWF0IjoxNTYxMjMwNDk4fQ.GXRszQ2Hd-E6h9Zo87BC8tcp3bmdvLS_pR6FXY_eRso";
+var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnRJZCI6InVzZXJuYW1lIiwiaWF0IjoxNTYyMTg2NjQ1fQ._cNibIlNkVOk2rLOJBrgKmlkF5YRYcppNROUaAV1amg";
 
 var args = {
     data :{ endpointType: 'REST_API',
@@ -50,7 +50,9 @@ var args = {
             requestedFields: ["DATE","AIRLINE", "FLIGHT_NUMBER","ORIGIN_AIRPORT","DESTINATION_AIRPORT",
             "SCHEDULED_DEPARTURE","CANCELLED","CANCELLATION_REASON"],
             filtersIds: ["cancelledToBoolean", "createDateField","cancellationReasonToText"],
+            //filtersIds: ["cancelledToBoolean", "createDateField","printOnScreen"],
             validationsIds: ["validDate","cancelled0or1","cancellationReasonProvided"],
+            //validationsIds: ["validDate","cancelled0or1"],
             triggerExpression: 'CANCELLED == 1'
 
         },
@@ -60,9 +62,9 @@ var args = {
 };
 
 try{
-    /*client.post("http://localhost:6666/register", args, function (data, response) {
+    client.post("http://localhost:6666/register", args, function (data, response) {
         console.log(data);
-    });*/
+    });
     /*client.put("http://localhost:6666/update/username", args, function (data, response) {
         console.log(data);
     });*/

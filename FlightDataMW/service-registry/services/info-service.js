@@ -1,4 +1,4 @@
-const DataFields = require('business-logic').DataFieldsList;
+const DataFields = require('business-logic').FlightDataFieldsList;
 
 module.exports = class InformationService{
 
